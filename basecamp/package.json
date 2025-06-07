@@ -1,0 +1,14 @@
+{
+  "name": "basecamp",
+  "version": "0.0.1",
+  "description": "Trails playground and examples",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "demo": "node demo.js",
+    "setup": "node setup.js"
+  },
+  "dependencies": {
+    "trails-lib": "workspace:*"
+  }
+}

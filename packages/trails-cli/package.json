@@ -1,0 +1,20 @@
+{
+  "name": "trails-cli",
+  "version": "0.0.1",
+  "description": "CLI for Trails context-log service",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "trails": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "trails-lib": "workspace:*",
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {}
+}
