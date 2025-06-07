@@ -1,0 +1,19 @@
+{
+  "name": "@galligan/trails-workspace",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Trails context-log service workspace",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "dev": "pnpm -r dev",
+    "clean": "pnpm -r clean"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  },
+  "packageManager": "pnpm@8.12.0"
+}
