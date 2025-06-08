@@ -3,12 +3,18 @@ import { unlinkSync, existsSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 
-// Mock process.exit to prevent tests from exiting
+/**
+ * Mock for process.exit to prevent tests from actually exiting
+ * Throws an error instead of exiting to allow tests to catch exit behavior
+ */
 export const mockExit = vi.spyOn(process, 'exit').mockImplementation(() => {
   throw new Error('process.exit called');
 });
 
-// Mock console methods
+/**
+ * Mocked console methods to prevent test output noise
+ * Includes mocks for console.log and console.error
+ */
 export const mockConsole = {
   log: vi.spyOn(console, 'log').mockImplementation(() => {}),
   error: vi.spyOn(console, 'error').mockImplementation(() => {}),

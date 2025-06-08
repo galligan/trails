@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+/** Maximum length for agent ID field */
+const MAX_AGENT_ID_LENGTH = 255;
+
+/** Maximum length for markdown content */
+const MAX_MARKDOWN_LENGTH = 50000;
+
 /**
  * Zod schema for validating note input
  * 
@@ -15,14 +21,14 @@ export const NoteInputSchema = z.object({
       invalid_type_error: 'Agent ID must be a string',
     })
     .min(1, 'Agent ID cannot be empty')
-    .max(255, 'Agent ID cannot exceed 255 characters'),
+    .max(MAX_AGENT_ID_LENGTH, `Agent ID cannot exceed ${MAX_AGENT_ID_LENGTH} characters`),
   md: z
     .string({
       required_error: 'Markdown content is required',
       invalid_type_error: 'Markdown content must be a string',
     })
     .min(1, 'Markdown content cannot be empty')
-    .max(50000, 'Markdown content cannot exceed 50,000 characters'),
+    .max(MAX_MARKDOWN_LENGTH, `Markdown content cannot exceed ${MAX_MARKDOWN_LENGTH.toLocaleString()} characters`),
   ts: z
     .number({
       invalid_type_error: 'Timestamp must be a number',

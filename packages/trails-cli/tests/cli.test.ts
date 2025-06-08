@@ -11,7 +11,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const cliPath = join(__dirname, '..', 'dist', 'index.js');
 
-// Helper to run CLI commands
+/**
+ * Helper to run CLI commands in a subprocess
+ * @param args - Array of command-line arguments
+ * @param env - Optional environment variables to set
+ * @returns Object containing stdout, stderr, and exit code
+ */
 function runCLI(
   args: string[],
   env: Record<string, string> = {},
@@ -37,16 +42,17 @@ function runCLI(
       stdio: ['pipe', 'pipe', 'pipe'],
     });
     return { stdout: result.toString(), stderr: '', code: 0 };
-  } catch (error: any) {
-    const stderr = error.stderr ? error.stderr.toString() : '';
-    const stdout = error.stdout ? error.stdout.toString() : '';
+  } catch (error) {
+    const err = error as { stderr?: Buffer; stdout?: Buffer; status?: number };
+    const stderr = err.stderr ? err.stderr.toString() : '';
+    const stdout = err.stdout ? err.stdout.toString() : '';
 
-    console.log('Command failed:', { stderr, stdout, code: error.status });
+    console.log('Command failed:', { stderr, stdout, code: err.status });
 
     return {
       stdout,
       stderr,
-      code: error.status || 1,
+      code: err.status || 1,
     };
   }
 }

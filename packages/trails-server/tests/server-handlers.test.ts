@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { existsSync, unlinkSync } from 'fs';
-import { setupDatabase, addNote, listNotes } from 'trails-lib';
+import { setupDatabase, addNote, listNotes, type TrailsDb } from 'trails-lib';
 
 // Test the handlers directly without mocking the entire server
 describe('Trails MCP Server Handlers', () => {
   let testDbPath: string;
-  let db: any;
+  let db: TrailsDb;
 
   beforeEach(async () => {
     testDbPath = './test-trails.sqlite';

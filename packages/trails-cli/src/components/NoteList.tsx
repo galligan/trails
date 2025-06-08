@@ -2,6 +2,11 @@ import React from 'react';
 import { Box, Text } from 'ink';
 import type { Note } from 'trails-lib';
 
+/** Maximum content length before truncation */
+const MAX_CONTENT_LENGTH = 50;
+/** Visible content length when truncated */
+const TRUNCATED_CONTENT_LENGTH = 47;
+
 // ink-table has issues with TypeScript, use a simple table for now
 const SimpleTable: React.FC<{ data: Array<{ Time: string; Agent: string; Content: string }> }> = ({ data }) => {
   return (
@@ -51,7 +56,7 @@ export const NoteList: React.FC<NoteListProps> = ({ notes, loading, error }) => 
   const tableData = notes.map((note) => ({
     Time: new Date(note.ts).toLocaleString(),
     Agent: note.agentId,
-    Content: note.md.length > 50 ? note.md.substring(0, 47) + '...' : note.md,
+    Content: note.md.length > MAX_CONTENT_LENGTH ? note.md.substring(0, TRUNCATED_CONTENT_LENGTH) + '...' : note.md,
   }));
 
   return (

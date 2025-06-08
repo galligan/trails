@@ -11,6 +11,12 @@ import { LoadingSpinner } from '../components/LoadingSpinner.js';
 import { ErrorMessage } from '../components/ErrorMessage.js';
 import { ensureAgentExists } from '../utils/agent.js';
 
+/** Timeout for database operations in milliseconds */
+const OPERATION_TIMEOUT = 30000; // 30 seconds
+
+/** Delay before exit to show success message */
+const SUCCESS_DISPLAY_DELAY = 1000; // 1 second
+
 interface AddCommandProps {
   agentId: string;
   timestamp?: number;
@@ -41,20 +47,31 @@ const AddCommand: React.FC<AddCommandProps> = ({ agentId, timestamp, initialCont
         ts: timestamp,
       });
 
-      const dbPath = resolve('./trails.sqlite');
-      const db = await setupDatabase(dbPath);
+      // Create a timeout promise
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Operation timed out')), OPERATION_TIMEOUT);
+      });
 
-      // Ensure agent exists
-      await ensureAgentExists(db, input.agentId);
+      // Race the operation against the timeout
+      await Promise.race([
+        (async () => {
+          const dbPath = resolve('./trails.sqlite');
+          const db = await setupDatabase(dbPath);
 
-      const id = await addNote(db, input);
-      setNoteId(id);
-      setStatus('success');
+          // Ensure agent exists
+          await ensureAgentExists(db, input.agentId);
+
+          const id = await addNote(db, input);
+          setNoteId(id);
+          setStatus('success');
+        })(),
+        timeoutPromise,
+      ]);
 
       // Exit after a short delay to show success message
       setTimeout(() => {
         process.exit(0);
-      }, 1000);
+      }, SUCCESS_DISPLAY_DELAY);
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
       setStatus('error');
