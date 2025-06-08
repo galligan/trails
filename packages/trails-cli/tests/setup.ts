@@ -19,7 +19,7 @@ beforeEach(() => {
   vi.clearAllMocks();
 
   // Reset environment variables
-  delete process.env.TRAILS_AGENT_ID;
+  process.env.TRAILS_AGENT_ID = undefined;
 });
 
 afterEach(() => {

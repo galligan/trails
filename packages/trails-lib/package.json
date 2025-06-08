@@ -12,10 +12,10 @@
     }
   },
   "bin": {
-    "trails-migrate": "./bin/trails-migrate.js"
+    "trails-migrate": "./dist/bin/trails-migrate.js"
   },
   "scripts": {
-    "build": "tsc && cp -r drizzle dist/",
+    "build": "tsc && tsc -p tsconfig.bin.json && cp -r drizzle dist/",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",

@@ -1,22 +1,203 @@
 import { z } from 'zod';
 
+/**
+ * Zod schema for validating note input
+ * 
+ * Ensures:
+ * - agentId is a non-empty string
+ * - md (markdown content) is a non-empty string
+ * - ts (timestamp) is an optional positive integer
+ */
 export const NoteInputSchema = z.object({
-  agentId: z.string().min(1, 'Agent ID is required'),
-  md: z.string().min(1, 'Markdown content is required'),
-  ts: z.number().int().positive().optional(),
+  agentId: z
+    .string({
+      required_error: 'Agent ID is required',
+      invalid_type_error: 'Agent ID must be a string',
+    })
+    .min(1, 'Agent ID cannot be empty')
+    .max(255, 'Agent ID cannot exceed 255 characters'),
+  md: z
+    .string({
+      required_error: 'Markdown content is required',
+      invalid_type_error: 'Markdown content must be a string',
+    })
+    .min(1, 'Markdown content cannot be empty')
+    .max(50000, 'Markdown content cannot exceed 50,000 characters'),
+  ts: z
+    .number({
+      invalid_type_error: 'Timestamp must be a number',
+    })
+    .int('Timestamp must be an integer')
+    .positive('Timestamp must be a positive number')
+    .optional(),
 });
 
+/**
+ * Zod schema for validating list options
+ * 
+ * Ensures:
+ * - agentId is an optional string
+ * - after is an optional positive integer timestamp
+ * - before is an optional positive integer timestamp
+ * - limit is a positive integer between 1 and 100 (default: 20)
+ */
 export const ListOptionsSchema = z.object({
-  agentId: z.string().optional(),
-  after: z.number().int().positive().optional(),
-  before: z.number().int().positive().optional(),
-  limit: z.number().int().positive().max(100).default(20),
+  agentId: z
+    .string({
+      invalid_type_error: 'Agent ID must be a string',
+    })
+    .min(1, 'Agent ID cannot be empty when provided')
+    .max(255, 'Agent ID cannot exceed 255 characters')
+    .optional(),
+  after: z
+    .number({
+      invalid_type_error: 'After timestamp must be a number',
+    })
+    .int('After timestamp must be an integer')
+    .positive('After timestamp must be a positive number')
+    .optional(),
+  before: z
+    .number({
+      invalid_type_error: 'Before timestamp must be a number',
+    })
+    .int('Before timestamp must be an integer')
+    .positive('Before timestamp must be a positive number')
+    .optional(),
+  limit: z
+    .number({
+      invalid_type_error: 'Limit must be a number',
+    })
+    .int('Limit must be an integer')
+    .min(1, 'Limit must be at least 1')
+    .max(100, 'Limit cannot exceed 100')
+    .default(20),
 });
 
+/**
+ * Formats Zod validation errors into user-friendly messages
+ * 
+ * @param error - The ZodError to format
+ * @returns A formatted error message string
+ */
+export function formatValidationError(error: z.ZodError): string {
+  const messages = error.errors.map((err) => {
+    const path = err.path.length > 0 ? `${err.path.join('.')}: ` : '';
+    return `${path}${err.message}`;
+  });
+  
+  return `Validation failed:\n${messages.join('\n')}`;
+}
+
+/**
+ * Validates input for creating a note
+ * 
+ * @param input - The input to validate
+ * @returns The validated and typed note input
+ * @throws {ZodError} If validation fails with detailed error messages
+ * 
+ * @example
+ * ```typescript
+ * try {
+ *   const validated = validateNoteInput({
+ *     agentId: 'my-agent',
+ *     md: 'Hello world',
+ *     ts: Date.now()
+ *   });
+ *   // validated is now typed as NoteInput
+ * } catch (error) {
+ *   if (error instanceof ZodError) {
+ *     console.error('Validation failed:', error.errors);
+ *   }
+ * }
+ * ```
+ */
 export function validateNoteInput(input: unknown): z.infer<typeof NoteInputSchema> {
   return NoteInputSchema.parse(input);
 }
 
+/**
+ * Validates options for listing notes
+ * 
+ * @param options - The options to validate
+ * @returns The validated and typed list options with defaults applied
+ * @throws {ZodError} If validation fails with detailed error messages
+ * 
+ * @example
+ * ```typescript
+ * try {
+ *   const validated = validateListOptions({
+ *     agentId: 'my-agent',
+ *     limit: 50,
+ *     after: Date.now() - 86400000 // 24 hours ago
+ *   });
+ *   // validated.limit is 50
+ * } catch (error) {
+ *   if (error instanceof ZodError) {
+ *     console.error('Validation failed:', error.errors);
+ *   }
+ * }
+ * ```
+ */
 export function validateListOptions(options: unknown): z.infer<typeof ListOptionsSchema> {
   return ListOptionsSchema.parse(options);
+}
+
+/**
+ * Safely validates input for creating a note
+ * 
+ * @param input - The input to validate
+ * @returns An object with either { success: true, data } or { success: false, error }
+ * 
+ * @example
+ * ```typescript
+ * const result = safeValidateNoteInput({
+ *   agentId: 'my-agent',
+ *   md: 'Hello world'
+ * });
+ * 
+ * if (result.success) {
+ *   console.log('Valid input:', result.data);
+ * } else {
+ *   console.error('Invalid input:', result.error);
+ * }
+ * ```
+ */
+export function safeValidateNoteInput(
+  input: unknown,
+): { success: true; data: z.infer<typeof NoteInputSchema> } | { success: false; error: string } {
+  const result = NoteInputSchema.safeParse(input);
+  if (result.success) {
+    return { success: true, data: result.data };
+  }
+  return { success: false, error: formatValidationError(result.error) };
+}
+
+/**
+ * Safely validates options for listing notes
+ * 
+ * @param options - The options to validate
+ * @returns An object with either { success: true, data } or { success: false, error }
+ * 
+ * @example
+ * ```typescript
+ * const result = safeValidateListOptions({
+ *   limit: 50,
+ *   agentId: 'my-agent'
+ * });
+ * 
+ * if (result.success) {
+ *   console.log('Valid options:', result.data);
+ * } else {
+ *   console.error('Invalid options:', result.error);
+ * }
+ * ```
+ */
+export function safeValidateListOptions(
+  options: unknown,
+): { success: true; data: z.infer<typeof ListOptionsSchema> } | { success: false; error: string } {
+  const result = ListOptionsSchema.safeParse(options);
+  if (result.success) {
+    return { success: true, data: result.data };
+  }
+  return { success: false, error: formatValidationError(result.error) };
 }

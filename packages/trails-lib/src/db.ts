@@ -12,15 +12,33 @@ import { users, agents, notes } from './schema.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Define the schema type
+/**
+ * Schema type for the Trails database
+ */
 type Schema = {
   users: typeof users;
   agents: typeof agents;
   notes: typeof notes;
 };
 
+/**
+ * Type alias for a Trails database connection with typed schema
+ */
 export type TrailsDb = BetterSQLite3Database<Schema>;
 
+/**
+ * Creates a database connection without running migrations
+ * 
+ * @param dbPath - Path to the SQLite database file (default: './trails.sqlite')
+ * @returns A Drizzle database instance with typed schema
+ * @throws {TrailsDbError} If the database cannot be opened
+ * 
+ * @example
+ * ```typescript
+ * const db = getDb('./my-trails.db');
+ * // Use db for queries, but remember to run migrations separately
+ * ```
+ */
 export function getDb(dbPath: string = './trails.sqlite'): TrailsDb {
   try {
     const sqlite = new Database(dbPath);
@@ -32,6 +50,33 @@ export function getDb(dbPath: string = './trails.sqlite'): TrailsDb {
   }
 }
 
+/**
+ * Sets up a database connection and runs migrations
+ * 
+ * This is the primary way to initialize a Trails database. It will:
+ * 1. Create or open the SQLite database file
+ * 2. Enable foreign key constraints
+ * 3. Run all pending migrations
+ * 4. Return a typed Drizzle database instance
+ * 
+ * The operation includes automatic retry logic for transient errors.
+ * 
+ * @param dbPath - Path to the SQLite database file (default: './trails.sqlite')
+ * @returns A promise that resolves to a Drizzle database instance with typed schema
+ * @throws {TrailsDbError} If the database cannot be opened or migrations fail after retries
+ * 
+ * @example
+ * ```typescript
+ * const db = await setupDatabase('./my-trails.db');
+ * // Database is ready to use with all migrations applied
+ * 
+ * // Add a note
+ * await addNote(db, {
+ *   agentId: 'my-agent',
+ *   md: 'Hello, world!'
+ * });
+ * ```
+ */
 export async function setupDatabase(dbPath: string = './trails.sqlite'): Promise<TrailsDb> {
   return retryDb(
     async () => {
@@ -66,7 +111,28 @@ export async function setupDatabase(dbPath: string = './trails.sqlite'): Promise
   );
 }
 
-// Synchronous version for backward compatibility if needed
+/**
+ * Synchronous version of setupDatabase
+ * 
+ * This function sets up a database connection and runs migrations synchronously.
+ * Consider using the async `setupDatabase` function instead for better error handling.
+ * 
+ * @param dbPath - Path to the SQLite database file (default: './trails.sqlite')
+ * @returns A Drizzle database instance with typed schema
+ * @throws {TrailsDbError} If the database cannot be opened or migrations fail
+ * 
+ * @deprecated Use `setupDatabase` (async) for better error handling and retry logic
+ * 
+ * @example
+ * ```typescript
+ * try {
+ *   const db = setupDatabaseSync('./my-trails.db');
+ *   // Database is ready to use
+ * } catch (error) {
+ *   console.error('Failed to setup database:', error);
+ * }
+ * ```
+ */
 export function setupDatabaseSync(dbPath: string = './trails.sqlite'): TrailsDb {
   try {
     const sqlite = new Database(dbPath);

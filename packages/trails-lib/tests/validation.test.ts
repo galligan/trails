@@ -44,7 +44,7 @@ describe('Validation Schemas', () => {
       } catch (err) {
         expect(err).toBeInstanceOf(z.ZodError);
         if (err instanceof z.ZodError) {
-          expect(err.errors[0].message).toBe('Agent ID is required');
+          expect(err.errors[0].message).toBe('Agent ID cannot be empty');
         }
       }
     });
@@ -61,7 +61,7 @@ describe('Validation Schemas', () => {
       } catch (err) {
         expect(err).toBeInstanceOf(z.ZodError);
         if (err instanceof z.ZodError) {
-          expect(err.errors[0].message).toBe('Markdown content is required');
+          expect(err.errors[0].message).toBe('Markdown content cannot be empty');
         }
       }
     });

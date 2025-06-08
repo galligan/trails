@@ -6,26 +6,65 @@ import { TrailsError, TrailsDbError } from './errors.js';
 import { retryDb } from './retry.js';
 import { notes } from './schema.js';
 
+/**
+ * Input parameters for creating a new note
+ */
 export interface NoteInput {
+  /** The ID of the agent creating the note */
   agentId: string;
+  /** The markdown content of the note */
   md: string;
+  /** Optional timestamp in milliseconds (defaults to current time) */
   ts?: number;
 }
 
+/**
+ * Options for listing notes
+ */
 export interface ListOptions {
+  /** Filter notes by agent ID */
   agentId?: string;
+  /** Only return notes created after this timestamp (milliseconds) */
   after?: number;
+  /** Only return notes created before this timestamp (milliseconds) */
   before?: number;
+  /** Maximum number of notes to return (default: 20) */
   limit?: number;
 }
 
+/**
+ * A note in the trails system
+ */
 export interface Note {
+  /** Unique identifier for the note */
   id: string;
+  /** The ID of the agent that created this note */
   agentId: string;
+  /** Timestamp when the note was created (milliseconds) */
   ts: number;
+  /** The markdown content of the note */
   md: string;
 }
 
+/**
+ * Adds a new note to the database
+ * 
+ * @param db - The database connection
+ * @param input - The note input containing agentId, markdown content, and optional timestamp
+ * @returns The ID of the newly created note
+ * @throws {TrailsDbError} If the database operation fails after retries
+ * @throws {TrailsError} If validation fails or other non-retryable error occurs
+ * 
+ * @example
+ * ```typescript
+ * const noteId = await addNote(db, {
+ *   agentId: 'cli-agent',
+ *   md: 'This is my note content',
+ *   ts: Date.now()
+ * });
+ * console.log(`Created note: ${noteId}`);
+ * ```
+ */
 export async function addNote(db: TrailsDb, input: NoteInput): Promise<string> {
   return retryDb(async () => {
     try {
@@ -51,6 +90,33 @@ export async function addNote(db: TrailsDb, input: NoteInput): Promise<string> {
   });
 }
 
+/**
+ * Lists notes from the database with optional filtering
+ * 
+ * @param db - The database connection
+ * @param options - Optional filters and pagination settings
+ * @returns An array of notes matching the criteria, ordered by timestamp descending
+ * @throws {TrailsDbError} If the database operation fails after retries
+ * @throws {TrailsError} If validation fails or other non-retryable error occurs
+ * 
+ * @example
+ * ```typescript
+ * // Get all notes
+ * const allNotes = await listNotes(db);
+ * 
+ * // Get notes for a specific agent
+ * const agentNotes = await listNotes(db, {
+ *   agentId: 'cli-agent',
+ *   limit: 10
+ * });
+ * 
+ * // Get notes within a time range
+ * const recentNotes = await listNotes(db, {
+ *   after: Date.now() - 86400000, // Last 24 hours
+ *   limit: 50
+ * });
+ * ```
+ */
 export async function listNotes(db: TrailsDb, options: ListOptions = {}): Promise<Note[]> {
   return retryDb(async () => {
     try {

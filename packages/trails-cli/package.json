@@ -18,7 +18,15 @@
   "dependencies": {
     "trails-lib": "workspace:*",
     "commander": "^14.0.0",
-    "drizzle-orm": "^0.44.2"
+    "drizzle-orm": "^0.44.2",
+    "ink": "^6.0.0",
+    "react": "^19.1.0",
+    "ink-spinner": "^5.0.0",
+    "ink-text-input": "^6.0.0",
+    "ink-select-input": "^6.2.0",
+    "ink-table": "^3.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/react": "^19.1.6"
+  }
 }

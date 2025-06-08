@@ -5,10 +5,17 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "demo": "node demo.js",
-    "setup": "node setup.js"
+    "build": "tsc",
+    "demo": "tsx demo.ts",
+    "setup": "tsx setup.ts"
   },
   "dependencies": {
-    "trails-lib": "workspace:*"
+    "trails-lib": "workspace:*",
+    "drizzle-orm": "^0.44.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3"
   }
 }
