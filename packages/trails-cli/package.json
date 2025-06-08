@@ -9,12 +9,16 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
     "dev": "tsc --watch",
     "clean": "rm -rf dist"
   },
   "dependencies": {
     "trails-lib": "workspace:*",
-    "commander": "^11.1.0"
+    "commander": "^14.0.0",
+    "drizzle-orm": "^0.44.2"
   },
   "devDependencies": {}
 }

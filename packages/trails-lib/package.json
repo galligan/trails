@@ -11,21 +11,32 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "bin": {
+    "trails-migrate": "./bin/trails-migrate.js"
+  },
   "scripts": {
-    "build": "tsc",
-    "test": "vitest",
+    "build": "tsc && cp -r drizzle dist/",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
     "dev": "tsc --watch",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:drop": "drizzle-kit drop",
+    "migrate": "node scripts/migrate.js"
   },
   "dependencies": {
-    "drizzle-orm": "^0.29.0",
-    "uuid": "^9.0.1",
-    "zod": "^3.22.4"
+    "drizzle-orm": "^0.44.2",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.56"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.8",
-    "@types/uuid": "^9.0.7",
-    "better-sqlite3": "^8.7.0",
-    "drizzle-kit": "^0.20.4"
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/uuid": "^10.0.0",
+    "better-sqlite3": "^11.10.0",
+    "drizzle-kit": "^0.31.1"
   }
 }

@@ -1,19 +1,28 @@
 export class TrailsError extends Error {
-  constructor(message: string, public cause?: unknown) {
+  constructor(
+    message: string,
+    public cause?: unknown,
+  ) {
     super(message);
     this.name = 'TrailsError';
   }
 }
 
 export class TrailsValidationError extends TrailsError {
-  constructor(message: string, public errors: Record<string, any>) {
+  constructor(
+    message: string,
+    public errors: Record<string, unknown>,
+  ) {
     super(message);
     this.name = 'TrailsValidationError';
   }
 }
 
 export class TrailsDbError extends TrailsError {
-  constructor(message: string, public operation: string) {
+  constructor(
+    message: string,
+    public operation: string,
+  ) {
     super(message);
     this.name = 'TrailsDbError';
   }
