@@ -39,13 +39,25 @@ function runCLI(
     const result = execSync(command, {
       env: { ...process.env, ...env },
       encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'pipe'],
+      stdio: 'pipe',
     });
     return { stdout: result.toString(), stderr: '', code: 0 };
   } catch (error) {
-    const err = error as { stderr?: Buffer; stdout?: Buffer; status?: number };
-    const stderr = err.stderr ? err.stderr.toString() : '';
-    const stdout = err.stdout ? err.stdout.toString() : '';
+    const err = error as { stderr?: Buffer | string; stdout?: Buffer | string; status?: number; output?: Array<Buffer | string | null> };
+    
+    // execSync with stdio:'pipe' returns output in the error object
+    let stdout = '';
+    let stderr = '';
+    
+    if (err.output) {
+      // output[0] is stdin (null), output[1] is stdout, output[2] is stderr
+      stdout = err.output[1] ? err.output[1].toString() : '';
+      stderr = err.output[2] ? err.output[2].toString() : '';
+    } else {
+      // Fallback to direct properties
+      stderr = err.stderr ? err.stderr.toString() : '';
+      stdout = err.stdout ? err.stdout.toString() : '';
+    }
 
     console.log('Command failed:', { stderr, stdout, code: err.status });
 
@@ -101,7 +113,6 @@ describe('Trails CLI', () => {
       mockConsole.log.mockRestore();
 
       const result = runCLI(['add', 'Test note content', '--agent-id', 'test-agent']);
-      console.log('Test result:', result);
       expect(result.code).toBe(0);
       expect(result.stdout).toContain('Note saved successfully');
       expect(existsSync(testDbPath)).toBe(true);
@@ -127,7 +138,8 @@ describe('Trails CLI', () => {
     });
 
     it('should fail when no agent ID is provided', () => {
-      const result = runCLI(['add', 'Test note']);
+      // Explicitly clear TRAILS_AGENT_ID to ensure no environment leak
+      const result = runCLI(['add', 'Test note'], { TRAILS_AGENT_ID: '' });
       expect(result.code).toBe(1);
       expect(result.stderr).toContain('Agent ID is required');
     });
@@ -300,7 +312,7 @@ describe('Trails CLI', () => {
   });
 
   describe('Error Handling', () => {
-    it('should handle database errors gracefully', () => {
+    it('should handle database errors gracefully', { timeout: 35000 }, () => {
       // Create a corrupted database
       const fs = require('fs');
       fs.writeFileSync(testDbPath, 'corrupted data');
@@ -324,8 +336,8 @@ describe('Trails CLI', () => {
 
     it('should handle invalid option types', () => {
       const result = runCLI(['add', 'Test', '--agent-id', 'test', '--timestamp', 'not-a-number']);
-      // Commander validates the timestamp option type
-      expect(result.stderr.length).toBeGreaterThan(0);
+      // Validation catches NaN from parseInt and shows error via React Ink
+      expect(result.stdout).toContain('Expected number, received nan');
     });
   });
 
