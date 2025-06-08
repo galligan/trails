@@ -37,7 +37,7 @@ async function main(): Promise<void> {
     console.log(`Found ${results.length} notes:\n`);
     
     results.forEach((note, index) => {
-      const date = new Date(note.ts * 1000).toLocaleString();
+      const date = new Date(note.ts).toLocaleString();
       console.log(`[${index + 1}] ${date}`);
       console.log(`ID: ${note.id}`);
       console.log('─'.repeat(50));

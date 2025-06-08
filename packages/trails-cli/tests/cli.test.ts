@@ -21,7 +21,8 @@ function runCLI(
       .map((arg) => {
         // Escape arguments that contain spaces or special characters
         if (arg.includes(' ') || arg.includes('\\') || arg.includes('"') || arg.includes('$')) {
-          return `"${arg.replace(/"/g, '\\"')}"`;
+          // Escape backslashes first, then quotes
+          return `"${arg.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
         }
         return arg;
       })

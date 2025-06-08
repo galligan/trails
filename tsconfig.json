@@ -33,5 +33,11 @@
     "**/vitest.config.ts",
     "**/drizzle.config.ts"
   ],
-  "include": ["packages/*/src/**/*", "vitest.setup.ts", "vitest.config.ts"]
+  "include": ["packages/*/src/**/*", "vitest.setup.ts", "vitest.config.ts"],
+  "references": [
+    { "path": "./basecamp" },
+    { "path": "./packages/trails-lib" },
+    { "path": "./packages/trails-cli" },
+    { "path": "./packages/trails-server" }
+  ]
 }
