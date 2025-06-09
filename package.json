@@ -1,8 +1,8 @@
 {
-  "name": "@galligan/trails-workspace",
+  "name": "@galligan/fieldbooks-workspace",
   "version": "0.0.1",
   "private": true,
-  "description": "Trails context-log service workspace",
+  "description": "Fieldbooks field recording service workspace",
   "type": "module",
   "scripts": {
     "build": "pnpm -r build && tsx scripts/add-generated-headers.ts",
@@ -25,9 +25,13 @@
     "ci:local": "pnpm run check:all && pnpm run typecheck && pnpm run test"
   },
   "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "@faker-js/faker": "^9.8.0",
     "@types/node": "^22.15.30",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
+    "@vitest/coverage-v8": "^3.2.2",
+    "better-sqlite3": "^11.10.0",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-import-resolver-typescript": "^4.4.3",
@@ -37,11 +41,9 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "prettier": "^3.5.3",
+    "tsx": "^4.19.2",
     "typescript": "^5.8.3",
-    "vitest": "^3.2.2",
-    "@vitest/coverage-v8": "^3.2.2",
-    "@faker-js/faker": "^9.8.0",
-    "tsx": "^4.19.2"
+    "vitest": "^3.2.2"
   },
   "packageManager": "pnpm@10.11.1"
 }

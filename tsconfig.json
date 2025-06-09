@@ -22,7 +22,16 @@
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "baseUrl": ".",
+    "paths": {
+      "fieldbooks-lib": ["./packages/fieldbooks-lib/src/index.ts"],
+      "fieldbooks-lib/*": ["./packages/fieldbooks-lib/src/*"],
+      "fieldbooks-cli": ["./packages/fieldbooks-cli/src/index.ts"],
+      "fieldbooks-cli/*": ["./packages/fieldbooks-cli/src/*"],
+      "fieldbooks-mcp": ["./packages/fieldbooks-mcp/src/index.ts"],
+      "fieldbooks-mcp/*": ["./packages/fieldbooks-mcp/src/*"]
+    }
   },
   "exclude": [
     "node_modules",
@@ -33,11 +42,11 @@
     "**/vitest.config.ts",
     "**/drizzle.config.ts"
   ],
-  "include": ["packages/*/src/**/*", "vitest.setup.ts", "vitest.config.ts"],
+  "include": ["packages/*/src/**/*", "vitest.setup.ts", "vitest.config.ts", "basecamp/*.ts", "scripts/*.ts", "setup-cli.ts"],
   "references": [
     { "path": "./basecamp" },
-    { "path": "./packages/trails-lib" },
-    { "path": "./packages/trails-cli" },
-    { "path": "./packages/trails-server" }
+    { "path": "./packages/fieldbooks-lib" },
+    { "path": "./packages/fieldbooks-cli" },
+    { "path": "./packages/fieldbooks-mcp" }
   ]
 }
