@@ -1,15 +1,15 @@
-# Trails v0.0.1
+# Fieldbooks v0.0.1
 
-A tiny, opinionated context-log service that agents and users can call to append or fetch notes for updates, recaps, hand-offs, etc.
+A tiny, opinionated field recording service that authors (users, agents, or services) can call to append or fetch entries for updates, recaps, hand-offs, etc.
 
 ## Project Structure
 
 ```
-trails/
+fieldbooks/
 ├── packages/
-│   ├── trails-lib/          # Core library with DB + domain logic
-│   ├── trails-server/       # MCP server wrapper
-│   └── trails-cli/          # Command line interface
+│   ├── fieldbooks-lib/      # Core library with DB + domain logic
+│   ├── fieldbooks-mcp/      # MCP server wrapper
+│   └── fieldbooks-cli/      # Command line interface
 ├── basecamp/                # Example repo & demo scripts
 └── pnpm-workspace.yaml
 ```
@@ -30,65 +30,69 @@ pnpm test
 cd basecamp && node setup.js && node demo.js
 
 # Test CLI
-TRAILS_AGENT_ID=my-agent node packages/trails-cli/dist/index.js add "Hello Trails!"
-node packages/trails-cli/dist/index.js tail -n 5
+FIELDBOOKS_AUTHOR_ID=my-author node packages/fieldbooks-cli/dist/index.js add "Hello Fieldbooks!"
+node packages/fieldbooks-cli/dist/index.js list -n 5
 
 # Test MCP server
-node packages/trails-server/dist/index.js
+node packages/fieldbooks-mcp/dist/index.js
 ```
 
 ## Core API
 
-### trails-lib
+### fieldbooks-lib
 
 ```typescript
-export interface NoteInput { 
-  agentId: string; 
+export interface EntryInput { 
+  authorId: string; 
   md: string; 
-  ts?: number 
+  ts?: number;
+  type?: 'update' | 'decision' | 'error' | 'handoff' | 'observation' | 'task' | 'checkpoint';
 }
 
-export async function addNote(db, input: NoteInput): Promise<string>
-export async function listNotes(db, options: ListOptions): Promise<Note[]>
+export async function addEntry(db, input: EntryInput): Promise<string>
+export async function listEntries(db, options: ListOptions): Promise<Entry[]>
 ```
 
 ### CLI Usage
 
 ```bash
-# Add a note
-trails add "Completed feature X" --agent-id my-agent
+# Add an entry
+fieldbooks add "Completed feature X" --author-id my-author --type update
 
-# List recent notes
-trails tail -n 10
-trails tail --agent-id my-agent
+# List recent entries
+fieldbooks list -n 10
+fieldbooks list --author-id my-author --type decision
+fieldbooks list --sort timestamp --order asc
 ```
 
 ### MCP Server
 
 The MCP server provides two tools:
-- `addNote` - Add a new note
-- `listNotes` - List existing notes
+- `addEntry` - Add a new entry with optional type
+- `listEntries` - List existing entries with filtering
 
 ## Database Schema
 
-- **users** - User accounts
-- **agents** - AI agents associated with users  
-- **notes** - Context log entries with markdown content
+- **authors** - Unified table for users, agents, and services
+- **entries** - Field recording entries with markdown content and types
 
 ## Features
 
 - ✅ SQLite storage with Drizzle ORM
 - ✅ TypeScript throughout
 - ✅ Input validation with Zod
-- ✅ CLI with Commander.js
+- ✅ CLI with Commander.js and React Ink
 - ✅ MCP server for agent integration
 - ✅ Workspace monorepo with pnpm
 - ✅ Comprehensive error handling
 - ✅ Demo environment
+- ✅ Entry types for categorization
+- ✅ Flexible author system (users, agents, services)
 
 ## Environment Variables
 
-- `TRAILS_AGENT_ID` - Default agent ID for CLI operations
+- `FIELDBOOKS_AUTHOR_ID` - Default author ID for CLI operations
+- `FIELDBOOKS_DB` - Path to SQLite database file
 
 ## Development
 
@@ -100,5 +104,5 @@ pnpm dev
 pnpm clean
 
 # Run specific package tests
-pnpm --filter trails-lib test
+pnpm --filter fieldbooks-lib test
 ```

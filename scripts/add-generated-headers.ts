@@ -42,7 +42,7 @@ async function findJsFiles(dir: string): Promise<string[]> {
   for (const entry of entries) {
     const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) {
-      files.push(...await findJsFiles(fullPath));
+      files.push(...(await findJsFiles(fullPath)));
     } else if (entry.name.endsWith('.js') && !entry.name.endsWith('.test.js')) {
       files.push(fullPath);
     }
@@ -59,28 +59,37 @@ async function findJsFiles(dir: string): Promise<string[]> {
 async function addHeadersToPackage(packagePath: string): Promise<void> {
   const distPath = join(packagePath, 'dist');
   const srcPath = join(packagePath, 'src');
-  
+
   try {
     const jsFiles = await findJsFiles(distPath);
-    
+
     for (const jsFile of jsFiles) {
       // Calculate the TypeScript source path
       const relativePath = relative(distPath, jsFile);
       const tsFile = join(srcPath, relativePath.replace(/\.js$/, '.ts'));
       const tsRelativePath = relative(dirname(jsFile), tsFile);
-      
+
       // Read the JavaScript file
       const content = await readFile(jsFile, 'utf-8');
-      
+
       // Skip if already has a generated header
-      if (content.startsWith('/**\n * @generated')) {
+      if (content.includes('@generated')) {
         continue;
       }
-      
-      // Add the header
+
+      // Check if the file starts with a shebang
+      const shebangMatch = content.match(/^(#!.*?\n)/);
       const header = generateHeader(jsFile, tsRelativePath);
-      await writeFile(jsFile, header + content);
-      
+
+      // Add the header after shebang if present, otherwise at the beginning
+      if (shebangMatch) {
+        const shebang = shebangMatch[1];
+        const restOfContent = content.slice(shebang.length);
+        await writeFile(jsFile, shebang + header + restOfContent);
+      } else {
+        await writeFile(jsFile, header + content);
+      }
+
       console.log(`✓ Added header to ${relative(packagePath, jsFile)}`);
     }
   } catch (error) {
@@ -96,15 +105,15 @@ async function addHeadersToPackage(packagePath: string): Promise<void> {
  */
 async function main(): Promise<void> {
   const packagesDir = join(__dirname, '..', 'packages');
-  const packages = ['trails-lib', 'trails-cli', 'trails-server'];
-  
+  const packages = ['fieldbooks-lib', 'fieldbooks-cli', 'fieldbooks-mcp'];
+
   console.log('Adding generated file headers...\n');
-  
+
   for (const pkg of packages) {
     const packagePath = join(packagesDir, pkg);
     await addHeadersToPackage(packagePath);
   }
-  
+
   console.log('\n✅ Headers added successfully!');
 }
 

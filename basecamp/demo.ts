@@ -1,47 +1,47 @@
 #!/usr/bin/env node
 
 /**
- * @fileoverview Demo script showing MCP server integration with Trails
+ * @fileoverview Demo script showing MCP server integration with Fieldbooks
  * @module basecamp/demo
  */
 
-import { setupDatabase, notes } from '../packages/trails-lib/dist/index.js';
 import { eq } from 'drizzle-orm';
-import type { TrailsDb } from '../packages/trails-lib/dist/index.js';
+import { setupFieldbook, entries } from 'fieldbooks-lib';
+import type { FieldbooksDb } from 'fieldbooks-lib';
 
 /**
- * Demonstrates basic Trails functionality by listing notes for a specific agent
+ * Demonstrates basic Fieldbooks functionality by listing entries for a specific author
  * @returns {Promise<void>}
  */
 async function main(): Promise<void> {
-  const dbPath = process.env.TRAILS_DB || './trails.sqlite';
-  const agentId = process.env.TRAILS_AGENT_ID || 'claude-engineer';
+  const authorId = process.env.FIELDBOOKS_AUTHOR_ID || 'claude-engineer';
 
-  console.log(`🔍 Fetching notes for agent: ${agentId}`);
-  console.log(`📁 Database: ${dbPath}\n`);
+  console.log(`🔍 Fetching entries for author: ${authorId}`);
+  console.log(`📁 Using .fieldbook directory structure\n`);
 
   try {
-    const db: TrailsDb = await setupDatabase(dbPath);
-    
+    const db: FieldbooksDb = await setupFieldbook();
+
     const results = await db
       .select()
-      .from(notes)
-      .where(eq(notes.agentId, agentId))
-      .orderBy(notes.ts);
+      .from(entries)
+      .where(eq(entries.authorId, authorId))
+      .orderBy(entries.ts);
 
     if (results.length === 0) {
-      console.log('No notes found for this agent.');
+      console.log('No entries found for this author.');
       return;
     }
 
-    console.log(`Found ${results.length} notes:\n`);
-    
-    results.forEach((note, index) => {
-      const date = new Date(note.ts).toLocaleString();
-      console.log(`[${index + 1}] ${date}`);
-      console.log(`ID: ${note.id}`);
+    console.log(`Found ${results.length} entries:\n`);
+
+    results.forEach((entry, index) => {
+      const date = new Date(entry.ts).toLocaleString();
+      const type = entry.type ? ` [${entry.type.toUpperCase()}]` : '';
+      console.log(`[${index + 1}] ${date}${type}`);
+      console.log(`ID: ${entry.id}`);
       console.log('─'.repeat(50));
-      console.log(note.md);
+      console.log(entry.md);
       console.log('\n');
     });
   } catch (error) {

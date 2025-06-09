@@ -8,7 +8,7 @@ About You: @.ai/prompts/MAX.md
 
 ## Overview
 
-Trails is a context-logging service for AI agents and users to append or fetch notes for updates, recaps, and hand-offs. It's built as a monorepo using pnpm workspaces with three main packages: trails-lib (core library), trails-cli (command-line interface), and trails-server (MCP server).
+Fieldbooks is a field recording service for AI agents and users to append or fetch entries for updates, recaps, and hand-offs. It's built as a monorepo using pnpm workspaces with three main packages: fieldbooks-lib (core library), fieldbooks-cli (command-line interface), and fieldbooks-mcp (MCP server).
 
 ## Commands
 
@@ -24,8 +24,8 @@ pnpm build
 pnpm dev
 
 # Run specific package commands
-pnpm --filter trails-lib build
-pnpm --filter trails-cli test
+pnpm --filter fieldbooks-lib build
+pnpm --filter fieldbooks-cli test
 ```
 
 ### Testing
@@ -40,7 +40,7 @@ pnpm test:coverage
 pnpm test:watch
 
 # Run tests for specific package
-pnpm --filter trails-lib test
+pnpm --filter fieldbooks-lib test
 ```
 
 ### Code Quality
@@ -60,32 +60,31 @@ pnpm typecheck
 
 ### Database
 ```bash
-# Run migrations (from trails-lib)
-pnpm --filter trails-lib db:migrate
+# Run migrations (from fieldbooks-lib)
+pnpm --filter fieldbooks-lib db:migrate
 
 # Generate migration files
-pnpm --filter trails-lib db:generate
+pnpm --filter fieldbooks-lib db:generate
 ```
 
 ## Architecture
 
 The project uses a clean monorepo structure with:
 
-- **trails-lib**: Core domain logic, database models (Drizzle ORM + SQLite), and validation (Zod)
-- **trails-cli**: Command-line interface with commands `add` and `tail`
-- **trails-server**: MCP server exposing `addNote` and `listNotes` tools via stdio transport
+- **fieldbooks-lib**: Core domain logic, database models (Drizzle ORM + SQLite), and validation (Zod)
+- **fieldbooks-cli**: Command-line interface with commands `add` and `list`
+- **fieldbooks-mcp**: MCP server exposing `addEntry` and `listEntries` tools via stdio transport
 
 Key architectural patterns:
 - All inputs validated with Zod schemas before processing
-- Custom error hierarchy (TrailsError) with retry logic for database operations
+- Custom error hierarchy (FieldbooksError) with retry logic for database operations
 - SQLite database with migrations support
 - Strict TypeScript with no `any` types
 - Async/await throughout with proper error handling
 
 The data model consists of:
-- `users`: User accounts
-- `agents`: AI agents associated with users
-- `notes`: Context log entries with timestamps and markdown content
+- `authors`: Unified table for users, agents, and services
+- `entries`: Field recording entries with timestamps, markdown content, and types
 
 ## Testing Approach
 
@@ -93,7 +92,7 @@ Tests use Vitest with separate test databases. Integration tests cover the full 
 
 ## MCP Server Development
 
-The trails-server package implements the Model Context Protocol. When modifying:
-- Update the tool schemas in `server.ts`
+The fieldbooks-mcp package implements the Model Context Protocol. When modifying:
+- Update the tool schemas in `index.ts`
 - Ensure stdio transport compatibility
 - Test with the MCP inspector or basecamp demo scripts

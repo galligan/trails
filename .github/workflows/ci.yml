@@ -109,9 +109,9 @@ jobs:
       - name: Check build artifacts
         run: |
           # Check that dist directories exist
-          test -d packages/trails-lib/dist
-          test -d packages/trails-cli/dist
-          test -d packages/trails-server/dist
+          test -d packages/fieldbooks-lib/dist
+          test -d packages/fieldbooks-cli/dist
+          test -d packages/fieldbooks-mcp/dist
 
           # Check that migration files are copied
-          test -f packages/trails-lib/dist/drizzle/0000_amused_rawhide_kid.sql
+          test -f packages/fieldbooks-lib/dist/drizzle/0000_amused_rawhide_kid.sql
