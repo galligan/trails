@@ -16,6 +16,7 @@ export const EntryEditor: React.FC<EntryEditorProps> = ({ onSubmit, onCancel, in
     if (key.ctrl && input === 's') {
       if (content.trim()) {
         onSubmit(content);
+        exit();
       }
     } else if (key.escape) {
       onCancel();

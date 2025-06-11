@@ -68,6 +68,8 @@ const ListCommand: React.FC<ListCommandProps> = ({
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
+        // propagate non-zero exit for automation
+        process.exitCode = 1;
         setLoading(false);
       }
     };

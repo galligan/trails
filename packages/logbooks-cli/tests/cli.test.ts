@@ -35,7 +35,7 @@ function runCLI(
 
     console.log('Running command:', cliPath, args);
 
-    // Include FIELDBOOKS_DB from process.env if not overridden
+    // Include LOGBOOKS_DB from process.env if not overridden
     const envVars = {
       ...process.env,
       ...env,
@@ -79,13 +79,13 @@ function runCLI(
   }
 }
 
-describe('Fieldbooks CLI', () => {
+describe('Logbooks CLI', () => {
   let testDbPath: string;
 
   beforeEach(() => {
-    testDbPath = './fieldbook.sqlite';
+    testDbPath = './logbook.sqlite';
     // Set environment variable for tests to use current directory
-    process.env.FIELDBOOKS_DB = testDbPath;
+    process.env.LOGBOOKS_DB = testDbPath;
     // Clean up any existing database
     if (existsSync(testDbPath)) {
       unlinkSync(testDbPath);
@@ -93,7 +93,7 @@ describe('Fieldbooks CLI', () => {
   });
 
   afterEach(() => {
-    delete process.env.FIELDBOOKS_DB;
+    delete process.env.LOGBOOKS_DB;
     if (existsSync(testDbPath)) {
       try {
         unlinkSync(testDbPath);
@@ -107,7 +107,7 @@ describe('Fieldbooks CLI', () => {
     it('should display help when no command is provided', () => {
       const result = runCLI(['--help']);
       expect(result.code).toBe(0);
-      expect(result.stdout).toContain('CLI for Fieldbooks field recording service');
+      expect(result.stdout).toContain('CLI for Logbooks field recording service');
       expect(result.stdout).toContain('Commands:');
       expect(result.stdout).toContain('add');
       expect(result.stdout).toContain('list');
@@ -132,14 +132,14 @@ describe('Fieldbooks CLI', () => {
     });
 
     it('should add an entry with author ID from environment', () => {
-      const result = runCLI(['add', 'Test entry from env'], { FIELDBOOKS_AUTHOR_ID: 'env-author' });
+      const result = runCLI(['add', 'Test entry from env'], { LOGBOOKS_AUTHOR_ID: 'env-author' });
       expect(result.code).toBe(0);
       expect(result.stdout).toContain('Entry saved successfully');
     });
 
     it('should prefer command line author ID over environment', async () => {
       const result = runCLI(['add', 'Test entry', '--author', 'cli-author'], {
-        FIELDBOOKS_AUTHOR_ID: 'env-author',
+        LOGBOOKS_AUTHOR_ID: 'env-author',
       });
       expect(result.code).toBe(0);
       expect(result.stdout).toContain('Entry saved successfully');
@@ -152,7 +152,7 @@ describe('Fieldbooks CLI', () => {
 
     it('should fail when no author ID is provided', () => {
       // Explicitly clear FIELDBOOKS_AUTHOR_ID to ensure no environment leak
-      const result = runCLI(['add', 'Test entry'], { FIELDBOOKS_AUTHOR_ID: '' });
+      const result = runCLI(['add', 'Test entry'], { LOGBOOKS_AUTHOR_ID: '' });
       expect(result.code).toBe(1);
       expect(result.stderr).toContain('Author ID is required');
     });

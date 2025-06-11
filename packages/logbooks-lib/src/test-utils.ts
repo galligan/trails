@@ -14,7 +14,6 @@ import type { LogbooksDb } from './db.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-
 /**
  * Sets up a test database at the specified path
  * @param dbPath - Path to the test database
@@ -22,10 +21,10 @@ const __dirname = dirname(__filename);
  */
 export async function setupTestDatabase(dbPath: string): Promise<LogbooksDb> {
   const sqliteDb = new Database(dbPath);
-  
+
   // Enable foreign keys
   sqliteDb.pragma('foreign_keys = ON');
-  
+
   const db = drizzle(sqliteDb, { schema: { authors, entries } });
 
   // Run migrations
@@ -54,12 +53,12 @@ export function getTestDb(dbPath: string = './logbook.sqlite'): LogbooksDb {
 export function setupTestDatabaseSync(dbPath: string): LogbooksDb {
   const sqliteDb = new Database(dbPath);
   sqliteDb.pragma('foreign_keys = ON');
-  
+
   const db = drizzle(sqliteDb, { schema: { authors, entries } });
-  
+
   // Run migrations synchronously
   // Note: Drizzle doesn't have a sync migrate, so we'll just return the db
   // In tests, we can use the async version or create tables manually if needed
-  
+
   return db;
 }

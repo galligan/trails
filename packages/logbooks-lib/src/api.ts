@@ -58,7 +58,7 @@ export interface Entry {
   /** The markdown content of the entry */
   md: string;
   /** The type of entry */
-  type?: string;
+  type: EntryType;
 }
 
 /**
@@ -137,7 +137,9 @@ export async function addEntry(db: LogbooksDb, input: EntryInput): Promise<strin
 export async function listEntries(db: LogbooksDb, options: ListOptions = {}): Promise<Entry[]> {
   return retryDb(async () => {
     try {
+      const MAX_LIMIT = 1000;
       const { authorId, after, before, limit = 20, type } = options;
+      const safeLimit = Math.min(limit, MAX_LIMIT);
 
       const conditions = [];
 
@@ -160,8 +162,8 @@ export async function listEntries(db: LogbooksDb, options: ListOptions = {}): Pr
       const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
       const query = whereClause
-        ? db.select().from(entries).where(whereClause).orderBy(desc(entries.ts)).limit(limit)
-        : db.select().from(entries).orderBy(desc(entries.ts)).limit(limit);
+        ? db.select().from(entries).where(whereClause).orderBy(desc(entries.ts)).limit(safeLimit)
+        : db.select().from(entries).orderBy(desc(entries.ts)).limit(safeLimit);
 
       const results = await query;
 

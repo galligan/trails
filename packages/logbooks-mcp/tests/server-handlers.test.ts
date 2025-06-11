@@ -1,14 +1,14 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { existsSync, unlinkSync } from 'fs';
-import { setupDatabase, addEntry, listEntries, type FieldbooksDb } from 'logbooks-lib';
+import { setupDatabase, addEntry, listEntries, type LogbooksDb } from 'logbooks-lib';
 
 // Test the handlers directly without mocking the entire server
-describe('Fieldbooks MCP Server Handlers', () => {
+describe('Logbooks MCP Server Handlers', () => {
   let testDbPath: string;
-  let db: FieldbooksDb;
+  let db: LogbooksDb;
 
   beforeEach(async () => {
-    testDbPath = './test-fieldbooks.sqlite';
+    testDbPath = './test-logbooks.sqlite';
     if (existsSync(testDbPath)) {
       unlinkSync(testDbPath);
     }
@@ -151,7 +151,7 @@ describe('Fieldbooks MCP Server Handlers', () => {
       const tools = [
         {
           name: 'addEntry',
-          description: 'Add a new entry to Fieldbooks',
+          description: 'Add a new entry to Logbooks',
           inputSchema: {
             type: 'object',
             properties: {
@@ -187,7 +187,7 @@ describe('Fieldbooks MCP Server Handlers', () => {
         },
         {
           name: 'listEntries',
-          description: 'List entries from Fieldbooks',
+          description: 'List entries from Logbooks',
           inputSchema: {
             type: 'object',
             properties: {

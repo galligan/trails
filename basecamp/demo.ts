@@ -1,26 +1,26 @@
 #!/usr/bin/env node
 
 /**
- * @fileoverview Demo script showing MCP server integration with Fieldbooks
+ * @fileoverview Demo script showing MCP server integration with Logbooks
  * @module basecamp/demo
  */
 
 import { eq } from 'drizzle-orm';
-import { setupFieldbook, entries } from 'logbooks-lib';
-import type { FieldbooksDb } from 'logbooks-lib';
+import { setupLogbook, entries } from 'logbooks-lib';
+import type { LogbooksDb } from 'logbooks-lib';
 
 /**
- * Demonstrates basic Fieldbooks functionality by listing entries for a specific author
+ * Demonstrates basic Logbooks functionality by listing entries for a specific author
  * @returns {Promise<void>}
  */
 async function main(): Promise<void> {
-  const authorId = process.env.FIELDBOOKS_AUTHOR_ID || 'claude-engineer';
+  const authorId = process.env.LOGBOOKS_AUTHOR_ID || 'claude-engineer';
 
   console.log(`🔍 Fetching entries for author: ${authorId}`);
-  console.log(`📁 Using .fieldbook directory structure\n`);
+  console.log(`📁 Using .logbook directory structure\n`);
 
   try {
-    const db: FieldbooksDb = await setupFieldbook();
+    const db: LogbooksDb = await setupLogbook();
 
     const results = await db
       .select()

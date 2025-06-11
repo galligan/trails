@@ -26,10 +26,13 @@ const server = new Server(
 );
 
 // Initialize database
-let db: LogbooksDb | null = null;
+let dbPromise: Promise<LogbooksDb> | null = null;
 
-async function initializeDb(): Promise<void> {
-  db = await setupLogbook();
+function getDb(): Promise<LogbooksDb> {
+  if (!dbPromise) {
+    dbPromise = setupLogbook();
+  }
+  return dbPromise;
 }
 
 // Add entry tool
@@ -51,10 +54,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   switch (name) {
     case 'addEntry': {
       try {
-        if (db === null) {
-          await initializeDb();
-          if (db === null) throw new Error('Failed to initialize database');
-        }
+        const db = await getDb();
 
         const input = validateEntryInput({
           authorId: args.authorId ?? 'mcp-client',
@@ -94,10 +94,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     case 'listEntries': {
       try {
-        if (db === null) {
-          await initializeDb();
-          if (db === null) throw new Error('Failed to initialize database');
-        }
+        const db = await getDb();
 
         const options = validateListOptions({
           authorId: args.authorId,
@@ -148,7 +145,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     default:
-      throw new Error(`Unknown tool: ${name}`);
+      return {
+        content: [{ type: 'text', text: `Unknown tool: ${name}` }],
+        isError: true,
+      };
   }
 });
 

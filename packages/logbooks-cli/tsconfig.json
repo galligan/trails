@@ -4,9 +4,7 @@
     "composite": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "jsx": "react",
-    "jsxFactory": "React.createElement",
-    "jsxFragmentFactory": "React.Fragment"
+    "jsx": "react-jsx"
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules"]

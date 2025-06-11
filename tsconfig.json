@@ -2,12 +2,14 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "NodeNext",
+    "jsx": "react-jsx",
     "moduleResolution": "NodeNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
+    "composite": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": true,
@@ -40,9 +42,17 @@
     "**/*.spec.ts",
     "**/tests/**",
     "**/vitest.config.ts",
-    "**/drizzle.config.ts"
+    "**/drizzle.config.ts",
+    "**/*.d.ts"
   ],
-  "include": ["packages/*/src/**/*", "vitest.setup.ts", "vitest.config.ts", "basecamp/*.ts", "scripts/*.ts", "setup-cli.ts"],
+  "include": [
+    "packages/*/src/**/*",
+    "vitest.setup.ts",
+    "vitest.config.ts",
+    "basecamp/*.ts",
+    "scripts/*.ts",
+    "setup-cli.ts"
+  ],
   "references": [
     { "path": "./basecamp" },
     { "path": "./packages/logbooks-lib" },

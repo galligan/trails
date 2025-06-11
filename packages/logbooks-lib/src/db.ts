@@ -41,9 +41,7 @@ export type LogbooksDb = BetterSQLite3Database<Schema>;
  * @param options - Options for path resolution, e.g., `{ global: true }`.
  * @returns A promise that resolves to a fully configured Drizzle database instance.
  */
-export async function initializeDatabase(
-  options: { global?: boolean } = {},
-): Promise<LogbooksDb> {
+export async function initializeDatabase(options: { global?: boolean } = {}): Promise<LogbooksDb> {
   const loadedConfig = await loadConfig();
   const paths = resolvePaths(loadedConfig, options);
 

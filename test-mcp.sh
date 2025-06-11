@@ -3,7 +3,10 @@
 echo "Testing MCP server..."
 
 # Start the MCP server in the background
-cd /home/runner/work/logbooks/logbooks
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+cd "${repo_root:-$(dirname "$0")/..}" || {
+  echo "❌ Unable to locate repository root"; exit 1;
+}
 timeout 5s node packages/logbooks-mcp/dist/index.js 2>/dev/null &
 SERVER_PID=$!
 

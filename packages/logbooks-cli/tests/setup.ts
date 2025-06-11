@@ -25,14 +25,14 @@ beforeEach(() => {
   vi.clearAllMocks();
 
   // Reset environment variables
-  process.env.FIELDBOOKS_AUTHOR_ID = undefined;
+  process.env.LOGBOOKS_AUTHOR_ID = undefined;
 });
 
 afterEach(() => {
   // Clean up test databases
   const files = require('fs').readdirSync(tmpdir());
   files.forEach((file: string) => {
-    if (file.startsWith('test-fieldbook-') && file.endsWith('.sqlite')) {
+    if (file.startsWith('test-logbook-') && file.endsWith('.sqlite')) {
       const path = join(tmpdir(), file);
       if (existsSync(path)) {
         try {
@@ -44,10 +44,10 @@ afterEach(() => {
     }
   });
 
-  // Clean up any local fieldbook.sqlite created during tests
-  if (existsSync('./fieldbook.sqlite')) {
+  // Clean up any local logbook.sqlite created during tests
+  if (existsSync('./logbook.sqlite')) {
     try {
-      unlinkSync('./fieldbook.sqlite');
+      unlinkSync('./logbook.sqlite');
     } catch {
       // Ignore
     }

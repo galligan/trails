@@ -89,7 +89,7 @@ describe('Database Functions', () => {
       const fs = await import('fs');
       fs.writeFileSync(testDbPath, 'corrupted data');
 
-      await expect(setupDatabase(testDbPath)).rejects.toThrow();
+      await expect(setupTestDatabase(testDbPath)).rejects.toThrow();
     });
   });
 

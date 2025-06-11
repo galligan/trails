@@ -4,7 +4,7 @@ import path, { join, dirname, resolve } from 'path';
 
 import { findUp } from 'find-up';
 import fs from 'fs-extra';
-import { xdgConfig } from 'xdg-basedir';
+import xdg from 'xdg-basedir';
 
 import { type LoadedConfig } from './config.js';
 
@@ -234,7 +234,7 @@ export function resolvePaths(
   options: { global?: boolean } = {},
 ): LogbookPaths {
   const home = process.env.HOME ?? process.cwd();
-  const globalConfigHome = xdgConfig ?? path.join(home, '.config');
+  const globalConfigHome = xdg.config ?? path.join(home, '.config');
   const globalConfigDir = path.join(globalConfigHome, GLOBAL_DIR_NAME);
 
   if (options.global) {

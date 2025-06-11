@@ -8,10 +8,7 @@ import { runListCommand } from './commands/list.js';
 
 const program = new Command();
 
-program
-  .name('logbooks')
-  .description('CLI for Logbooks field recording service')
-  .version('0.0.1');
+program.name('logbook').description('CLI for Logbooks field recording service').version('0.0.1');
 
 program
   .command('init')
