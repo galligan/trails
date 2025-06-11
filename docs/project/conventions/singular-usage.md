@@ -1,110 +1,110 @@
-# Fieldbook vs Fieldbooks: Singular Usage Guidelines
+# Logbook vs Logbooks: Singular Usage Guidelines
 
 ## Overview
 
-While the project name is "Fieldbooks" (plural), there are many contexts where "fieldbook" (singular) is more appropriate. This document outlines where to use each form.
+While the project name is "Logbooks" (plural), there are many contexts where "logbook" (singular) is more appropriate. This document outlines where to use each form.
 
-## Use "Fieldbook" (Singular) For:
+## Use "Logbook" (Singular) For:
 
 ### 1. Database References
-- **Database filename**: `fieldbook.sqlite` (not `fieldbooks.sqlite`)
-  - Rationale: Each database file represents a single fieldbook instance
-- **Connection strings**: "Connecting to fieldbook database..."
-- **Initialization**: "Initializing fieldbook..."
+- **Database filename**: `logbook.sqlite` (not `logbooks.sqlite`)
+  - Rationale: Each database file represents a single logbook instance
+- **Connection strings**: "Connecting to logbook database..."
+- **Initialization**: "Initializing logbook..."
 
 ### 2. Instance-Specific Operations
-When referring to operations on a specific fieldbook instance:
-- "Add a new entry to the fieldbook"
-- "List entries from the fieldbook"
-- "Query the fieldbook for recent updates"
-- "Successfully saved to fieldbook"
+When referring to operations on a specific logbook instance:
+- "Add a new entry to the logbook"
+- "List entries from the logbook"
+- "Query the logbook for recent updates"
+- "Successfully saved to logbook"
 
 ### 3. User-Facing Messages
 #### Success Messages
-- "Entry added to fieldbook"
-- "Fieldbook initialized successfully"
-- "Connected to fieldbook"
+- "Entry added to logbook"
+- "Logbook initialized successfully"
+- "Connected to logbook"
 
 #### Error Messages
-- "Error: Cannot connect to fieldbook database"
-- "Error: Failed to initialize fieldbook"
-- "Error: Invalid fieldbook configuration"
+- "Error: Cannot connect to logbook database"
+- "Error: Failed to initialize logbook"
+- "Error: Invalid logbook configuration"
 
 #### Example Content
-- "Hello Fieldbook!" (writing TO the fieldbook)
-- "Recording in fieldbook: [content]"
+- "Hello Logbook!" (writing TO the logbook)
+- "Recording in logbook: [content]"
 
 ### 4. Conceptual References
-When explaining what a fieldbook is:
-- "A fieldbook contains entries from various authors"
-- "Each fieldbook stores field recordings with timestamps"
-- "The fieldbook tracks updates, decisions, errors, and more"
-- "Your fieldbook is a chronological record of field observations"
+When explaining what a logbook is:
+- "A logbook contains entries from various authors"
+- "Each logbook stores field recordings with timestamps"
+- "The logbook tracks updates, decisions, errors, and more"
+- "Your logbook is a chronological record of field observations"
 
 ### 5. Type/Class Names (Future)
 If we add types or classes representing a single instance:
 ```typescript
-interface Fieldbook {
+interface Logbook {
   id: string;
   name: string;
   createdAt: Date;
 }
 
-class FieldbookDatabase {
-  // Methods for a single fieldbook
+class LogbookDatabase {
+  // Methods for a single logbook
 }
 
-type FieldbookConfig = {
+type LogbookConfig = {
   dbPath: string;
   defaultAuthor?: string;
 }
 
-interface FieldbookEntry {
-  // Single entry in a fieldbook
+interface LogbookEntry {
+  // Single entry in a logbook
 }
 ```
 
 ### 6. Documentation
 When describing the concept:
-- "A fieldbook is a chronological log of field recordings"
-- "Each author writes to their fieldbook"
-- "The fieldbook maintains a history of all entries"
+- "A logbook is a chronological log of field recordings"
+- "Each author writes to their logbook"
+- "The logbook maintains a history of all entries"
 
-## Keep "Fieldbooks" (Plural) For:
+## Keep "Logbooks" (Plural) For:
 
 ### 1. Project Identity
-- Project name: **Fieldbooks**
-- Repository name: `fieldbooks`
-- Package scope: `@fieldbooks/*` (if scoped)
+- Project name: **Logbooks**
+- Repository name: `logbooks`
+- Package scope: `@logbooks/*` (if scoped)
 
 ### 2. Package Names
-- `fieldbooks-lib` - Core library
-- `fieldbooks-cli` - Command line interface
-- `fieldbooks-mcp` - MCP server
-- `fieldbooks-api` - Future HTTP API package
+- `logbooks-lib` - Core library
+- `logbooks-cli` - Command line interface
+- `logbooks-mcp` - MCP server
+- `logbooks-api` - Future HTTP API package
 
 ### 3. CLI Command
-- Command: `fieldbooks`
-- Usage: `fieldbooks add "my entry"`
-- Help: `fieldbooks --help`
+- Command: `logbooks`
+- Usage: `logbooks add "my entry"`
+- Help: `logbooks --help`
 
 ### 4. Service Descriptions
-- "Fieldbooks field recording service"
-- "Fieldbooks - A tiny, opinionated field recording service"
-- "CLI for Fieldbooks field recording service"
+- "Logbooks field recording service"
+- "Logbooks - A tiny, opinionated field recording service"
+- "CLI for Logbooks field recording service"
 
 ### 5. Marketing/Product Language
-- "Welcome to Fieldbooks"
-- "Fieldbooks helps you track field observations"
-- "Get started with Fieldbooks"
+- "Welcome to Logbooks"
+- "Logbooks helps you track field observations"
+- "Get started with Logbooks"
 
 ## Implementation Checklist
 
 ### High Priority Changes
-- [ ] Rename `fieldbooks.sqlite` → `fieldbook.sqlite` throughout codebase
+- [ ] Rename `logbooks.sqlite` → `logbook.sqlite` throughout codebase
 - [ ] Update MCP tool descriptions:
-  - [ ] "Add a new entry to the fieldbook"
-  - [ ] "List entries from the fieldbook"
+  - [ ] "Add a new entry to the logbook"
+  - [ ] "List entries from the logbook"
 - [ ] Update success/error messages to use singular form
 
 ### Medium Priority Changes
@@ -121,30 +121,30 @@ When describing the concept:
 ### CLI Usage
 ```bash
 # Command uses plural
-$ fieldbooks add "Starting new experiment"
+$ logbooks add "Starting new experiment"
 
 # Response uses singular
-✓ Entry added to fieldbook
+✓ Entry added to logbook
 
 # Error uses singular
-✗ Error: Cannot connect to fieldbook database
+✗ Error: Cannot connect to logbook database
 ```
 
 ### API Usage
 ```typescript
 // Import uses plural
-import { setupDatabase } from 'fieldbooks-lib';
+import { setupDatabase } from 'logbooks-lib';
 
 // But operations reference singular
-const db = await setupDatabase('./fieldbook.sqlite');
-console.log('Fieldbook initialized');
+const db = await setupDatabase('./logbook.sqlite');
+console.log('Logbook initialized');
 ```
 
 ### MCP Usage
 ```json
 {
   "name": "addEntry",
-  "description": "Add a new entry to the fieldbook",
+  "description": "Add a new entry to the logbook",
   "inputSchema": { ... }
 }
 ```
@@ -156,4 +156,4 @@ This distinction follows common patterns in software:
 - **WordPress** (product) vs "blog" (instance)
 - **Notion** (product) vs "workspace" (instance)
 
-The plural "Fieldbooks" represents the service/platform that manages fieldbooks, while "fieldbook" represents an individual instance that users interact with.
+The plural "Logbooks" represents the service/platform that manages logbooks, while "logbook" represents an individual instance that users interact with.

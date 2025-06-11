@@ -1,4 +1,4 @@
-# Trails MVP - Complete Implementation Plan
+# Logbooks MVP - Complete Implementation Plan
 
 ## 1.0 Bootstrap Monorepo Structure
 
@@ -30,9 +30,9 @@ packages:
 Create the folder structure for all packages:
 
 ```bash
-mkdir -p packages/trails-lib/src
-mkdir -p packages/trails-server/src
-mkdir -p packages/trails-cli/src
+mkdir -p packages/logbooks-lib/src
+mkdir -p packages/logbooks-server/src
+mkdir -p packages/logbooks-cli/src
 mkdir -p basecamp
 ```
 
@@ -121,7 +121,7 @@ Implement the core data model using Drizzle ORM for SQLite. Define the schema fo
 Create the schema definitions as specified in the requirements:
 
 ```typescript
-// packages/trails-lib/src/schema.ts
+// packages/logbooks-lib/src/schema.ts
 import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
@@ -150,7 +150,7 @@ export const notes = sqliteTable('notes', {
 Implement migration helpers for database setup:
 
 ```typescript
-// packages/trails-lib/src/migrate.ts
+// packages/logbooks-lib/src/migrate.ts
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 import Database from 'better-sqlite3';
@@ -171,7 +171,7 @@ export async function setupDatabase(dbPath: string): Promise<typeof schema> {
 Create utility functions for database operations:
 
 ```typescript
-// packages/trails-lib/src/db.ts
+// packages/logbooks-lib/src/db.ts
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
 import * as schema from './schema';
@@ -179,7 +179,7 @@ import path from 'path';
 import fs from 'fs';
 
 export function getDb(dbPath?: string): ReturnType<typeof drizzle> {
-  const finalPath = dbPath || process.env.TRAILS_DB_PATH || './trails.sqlite';
+  const finalPath = dbPath || process.env.LOGBOOKS_DB_PATH || './logbooks.sqlite';
   
   // Ensure directory exists
   const dir = path.dirname(finalPath);
@@ -197,7 +197,7 @@ export function getDb(dbPath?: string): ReturnType<typeof drizzle> {
 Implement basic CRUD operations for each entity:
 
 ```typescript
-// packages/trails-lib/src/operations.ts
+// packages/logbooks-lib/src/operations.ts
 import { eq } from 'drizzle-orm';
 import { users, agents, notes } from './schema';
 import { v4 as uuidv4 } from 'uuid';
@@ -231,14 +231,14 @@ export async function createAgent(db, userId: string, label: string) {
 Create comprehensive tests for the data model:
 
 ```typescript
-// packages/trails-lib/test/schema.test.ts
+// packages/logbooks-lib/test/schema.test.ts
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { getDb } from '../src/db';
 import { setupDatabase } from '../src/migrate';
 import * as ops from '../src/operations';
 import fs from 'fs';
 
-describe('Trails Schema', () => {
+describe('Logbooks Schema', () => {
   const TEST_DB = './test.sqlite';
   let db;
   
@@ -269,7 +269,7 @@ describe('Trails Schema', () => {
 });
 ```
 
-## 3.0 Develop Core API Layer in trails-lib
+## 3.0 Develop Core API Layer in logbooks-lib
 
 - **Priority:** High (Foundational)
 - **Subtasks:**
@@ -281,14 +281,14 @@ describe('Trails Schema', () => {
 - **Depends on:** [2.0 Implement Data Model with Drizzle](#20-implement-data-model-with-drizzle)
 - **Description:**
 
-Develop the core API layer for trails-lib that provides the main functionality for adding and retrieving notes. This creates the foundation that both the CLI and MCP server will build upon.
+Develop the core API layer for logbooks-lib that provides the main functionality for adding and retrieving notes. This creates the foundation that both the CLI and MCP server will build upon.
 
 ### 3.1 Implement addNote function
 
 Create the primary function for adding notes:
 
 ```typescript
-// packages/trails-lib/src/api.ts
+// packages/logbooks-lib/src/api.ts
 import { notes } from './schema';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -318,7 +318,7 @@ export async function addNote(db, input: NoteInput): Promise<string> {
 Implement the function to retrieve notes with pagination:
 
 ```typescript
-// packages/trails-lib/src/api.ts (continued)
+// packages/logbooks-lib/src/api.ts (continued)
 import { desc, eq, gt, lt } from 'drizzle-orm';
 
 export interface ListOptions {
@@ -364,16 +364,16 @@ export async function listNotes(
 Implement consistent error handling:
 
 ```typescript
-// packages/trails-lib/src/errors.ts
-export class TrailsError extends Error {
+// packages/logbooks-lib/src/errors.ts
+export class LogbooksError extends Error {
   constructor(message: string, public cause?: unknown) {
     super(message);
-    this.name = 'TrailsError';
+    this.name = 'LogbooksError';
   }
 }
 
 // Update API functions with error handling
-// packages/trails-lib/src/api.ts (updated)
+// packages/logbooks-lib/src/api.ts (updated)
 export async function addNote(db, input: NoteInput): Promise<string> {
   try {
     const id = uuidv4();
@@ -388,7 +388,7 @@ export async function addNote(db, input: NoteInput): Promise<string> {
     
     return id;
   } catch (err) {
-    throw new TrailsError('Failed to add note', err);
+    throw new LogbooksError('Failed to add note', err);
   }
 }
 ```
@@ -398,14 +398,14 @@ export async function addNote(db, input: NoteInput): Promise<string> {
 Create comprehensive tests for the API:
 
 ```typescript
-// packages/trails-lib/test/api.test.ts
+// packages/logbooks-lib/test/api.test.ts
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { getDb } from '../src/db';
 import { setupDatabase } from '../src/migrate';
 import { addNote, listNotes } from '../src/api';
 import fs from 'fs';
 
-describe('Trails API', () => {
+describe('Logbooks API', () => {
   const TEST_DB = './test-api.sqlite';
   let db;
   
@@ -460,7 +460,7 @@ describe('Trails API', () => {
 Set up the public API exports:
 
 ```typescript
-// packages/trails-lib/src/index.ts
+// packages/logbooks-lib/src/index.ts
 export * from './schema';
 export * from './migrate';
 export * from './db';
@@ -477,7 +477,7 @@ export * from './errors';
   - [4.3 Define custom error types](#43-define-custom-error-types)
   - [4.4 Integrate with API functions](#44-integrate-with-api-functions)
   - [4.5 Write validation tests](#45-write-validation-tests)
-- **Depends on:** [3.0 Develop Core API Layer in trails-lib](#30-develop-core-api-layer-in-trails-lib)
+- **Depends on:** [3.0 Develop Core API Layer in logbooks-lib](#30-develop-core-api-layer-in-logbooks-lib)
 - **Description:**
 
 Build a comprehensive validation layer using Zod to ensure data integrity and provide clear error messages for note inputs and other data structures.
@@ -487,7 +487,7 @@ Build a comprehensive validation layer using Zod to ensure data integrity and pr
 Define validation schemas for all input types:
 
 ```typescript
-// packages/trails-lib/src/validation.ts
+// packages/logbooks-lib/src/validation.ts
 import { z } from 'zod';
 
 export const NoteSchema = z.object({
@@ -513,7 +513,7 @@ export type ValidatedListOptions = z.infer<typeof ListOptionsSchema>;
 Create validator functions that apply the schemas:
 
 ```typescript
-// packages/trails-lib/src/validation.ts (continued)
+// packages/logbooks-lib/src/validation.ts (continued)
 export function validateNote(input: unknown): ValidatedNoteInput {
   return NoteSchema.parse(input);
 }
@@ -528,24 +528,24 @@ export function validateListOptions(input: unknown): ValidatedListOptions {
 Create specialized error types for validation:
 
 ```typescript
-// packages/trails-lib/src/errors.ts (updated)
+// packages/logbooks-lib/src/errors.ts (updated)
 import { ZodError } from 'zod';
 
-export class TrailsError extends Error {
+export class LogbooksError extends Error {
   constructor(message: string, public cause?: unknown) {
     super(message);
-    this.name = 'TrailsError';
+    this.name = 'LogbooksError';
   }
 }
 
-export class TrailsValidationError extends TrailsError {
+export class LogbooksValidationError extends LogbooksError {
   constructor(message: string, public errors: Record<string, any>) {
     super(message);
-    this.name = 'TrailsValidationError';
+    this.name = 'LogbooksValidationError';
   }
   
-  static fromZodError(err: ZodError): TrailsValidationError {
-    return new TrailsValidationError(
+  static fromZodError(err: ZodError): LogbooksValidationError {
+    return new LogbooksValidationError(
       'Validation failed',
       err.format()
     );
@@ -558,9 +558,9 @@ export class TrailsValidationError extends TrailsError {
 Update API functions to use validation:
 
 ```typescript
-// packages/trails-lib/src/api.ts (updated)
+// packages/logbooks-lib/src/api.ts (updated)
 import { validateNote, validateListOptions } from './validation';
-import { TrailsValidationError } from './errors';
+import { LogbooksValidationError } from './errors';
 import { z } from 'zod';
 
 export async function addNote(db, input: NoteInput): Promise<string> {
@@ -578,9 +578,9 @@ export async function addNote(db, input: NoteInput): Promise<string> {
     return id;
   } catch (err) {
     if (err instanceof z.ZodError) {
-      throw TrailsValidationError.fromZodError(err);
+      throw LogbooksValidationError.fromZodError(err);
     }
-    throw new TrailsError('Failed to add note', err);
+    throw new LogbooksError('Failed to add note', err);
   }
 }
 
@@ -595,9 +595,9 @@ export async function listNotes(
     // ...existing implementation
   } catch (err) {
     if (err instanceof z.ZodError) {
-      throw TrailsValidationError.fromZodError(err);
+      throw LogbooksValidationError.fromZodError(err);
     }
-    throw new TrailsError('Failed to list notes', err);
+    throw new LogbooksError('Failed to list notes', err);
   }
 }
 ```
@@ -607,10 +607,10 @@ export async function listNotes(
 Test the validation layer:
 
 ```typescript
-// packages/trails-lib/test/validation.test.ts
+// packages/logbooks-lib/test/validation.test.ts
 import { describe, it, expect } from 'vitest';
 import { validateNote, validateListOptions } from '../src/validation';
-import { TrailsValidationError } from '../src/errors';
+import { LogbooksValidationError } from '../src/errors';
 import { z } from 'zod';
 
 describe('Validation', () => {
@@ -649,7 +649,7 @@ describe('Validation', () => {
     ↓
 2.0 Implement Data Model with Drizzle
     ↓
-3.0 Develop Core API Layer in trails-lib
+3.0 Develop Core API Layer in logbooks-lib
     ↓
     ├─────────┬────────────┬──────────┐
     ↓         ↓            ↓          ↓
@@ -684,31 +684,31 @@ describe('Validation', () => {
 
 - **Error hierarchy:**
   ```typescript
-  class TrailsError extends Error {
+  class LogbooksError extends Error {
     constructor(message: string, public cause?: unknown) {
       super(message);
-      this.name = 'TrailsError';
+      this.name = 'LogbooksError';
     }
   }
   
-  class TrailsValidationError extends TrailsError {
+  class LogbooksValidationError extends LogbooksError {
     constructor(message: string, public errors: Record<string, any>) {
       super(message);
-      this.name = 'TrailsValidationError';
+      this.name = 'LogbooksValidationError';
     }
   }
   
-  class TrailsConfigError extends TrailsError {
+  class LogbooksConfigError extends LogbooksError {
     constructor(message: string, public configPath?: string) {
       super(message);
-      this.name = 'TrailsConfigError';
+      this.name = 'LogbooksConfigError';
     }
   }
   
-  class TrailsDbError extends TrailsError {
+  class LogbooksDbError extends LogbooksError {
     constructor(message: string, public operation: string) {
       super(message);
-      this.name = 'TrailsDbError';
+      this.name = 'LogbooksDbError';
     }
   }
   ```
@@ -718,7 +718,7 @@ describe('Validation', () => {
   try {
     // Operation
   } catch (err) {
-    throw new TrailsError('Failed to perform operation', {
+    throw new LogbooksError('Failed to perform operation', {
       code: 'OPERATION_FAILED',
       details: { /* contextual information */ },
       cause: err
@@ -731,7 +731,7 @@ describe('Validation', () => {
 - **SQLite configuration:**
   ```typescript
   function getDb(dbPath?: string) {
-    const finalPath = dbPath || process.env.TRAILS_DB_PATH || './trails.sqlite';
+    const finalPath = dbPath || process.env.LOGBOOKS_DB_PATH || './logbooks.sqlite';
     const sqlite = new Database(finalPath);
     
     // Set pragmas for better performance
@@ -749,7 +749,7 @@ describe('Validation', () => {
     backupDir: string = './backups'
   ): Promise<string> {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const backupPath = path.join(backupDir, `trails-backup-${timestamp}.sqlite`);
+    const backupPath = path.join(backupDir, `logbooks-backup-${timestamp}.sqlite`);
     
     // Ensure backup directory exists
     fs.mkdirSync(backupDir, { recursive: true });
@@ -766,7 +766,7 @@ describe('Validation', () => {
     verifyDb.close();
     
     if (integrity !== 'ok') {
-      throw new TrailsError('Backup integrity verification failed');
+      throw new LogbooksError('Backup integrity verification failed');
     }
     
     return backupPath;
@@ -781,7 +781,7 @@ describe('Validation', () => {
   import { Command } from 'commander';
   
   const program = new Command()
-    .name('trails')
+    .name('logbooks')
     .description('Context logging for agents')
     .version('0.1.0');
   
@@ -789,7 +789,7 @@ describe('Validation', () => {
     .command('add')
     .description('Add a new note')
     .argument('<note>', 'Note content in Markdown')
-    .option('-a, --agent <id>', 'Agent ID', process.env.TRAILS_AGENT_ID)
+    .option('-a, --agent <id>', 'Agent ID', process.env.LOGBOOKS_AGENT_ID)
     .action(async (note, options) => {
       // Implementation
     });
@@ -816,22 +816,22 @@ describe('Validation', () => {
     listLimit: z.number().int().positive().optional().default(20)
   });
   
-  type TrailsConfig = z.infer<typeof ConfigSchema>;
+  type LogbooksConfig = z.infer<typeof ConfigSchema>;
   ```
 
 - **Configuration loading:**
   ```typescript
-  function loadConfig(): TrailsConfig {
+  function loadConfig(): LogbooksConfig {
     // 1. Default values
-    const defaultConfig: TrailsConfig = {
-      dbPath: './trails.sqlite',
+    const defaultConfig: LogbooksConfig = {
+      dbPath: './logbooks.sqlite',
       backupDir: './backups',
       listLimit: 20
     };
     
     // 2. Load from global config
     let globalConfig = {};
-    const globalPath = path.join(os.homedir(), '.trailsrc.json');
+    const globalPath = path.join(os.homedir(), '.logbooksrc.json');
     if (fs.existsSync(globalPath)) {
       try {
         globalConfig = JSON.parse(fs.readFileSync(globalPath, 'utf8'));
@@ -842,7 +842,7 @@ describe('Validation', () => {
     
     // 3. Load from project config
     let projectConfig = {};
-    const projectPath = path.join(process.cwd(), '.trailsrc.json');
+    const projectPath = path.join(process.cwd(), '.logbooksrc.json');
     if (fs.existsSync(projectPath)) {
       try {
         projectConfig = JSON.parse(fs.readFileSync(projectPath, 'utf8'));
@@ -852,12 +852,12 @@ describe('Validation', () => {
     }
     
     // 4. Environment variables
-    const envConfig: Partial<TrailsConfig> = {
-      dbPath: process.env.TRAILS_DB_PATH,
-      backupDir: process.env.TRAILS_BACKUP_DIR,
-      defaultAgentId: process.env.TRAILS_AGENT_ID,
-      listLimit: process.env.TRAILS_LIST_LIMIT 
-        ? parseInt(process.env.TRAILS_LIST_LIMIT, 10) 
+    const envConfig: Partial<LogbooksConfig> = {
+      dbPath: process.env.LOGBOOKS_DB_PATH,
+      backupDir: process.env.LOGBOOKS_BACKUP_DIR,
+      defaultAgentId: process.env.LOGBOOKS_AGENT_ID,
+      listLimit: process.env.LOGBOOKS_LIST_LIMIT 
+        ? parseInt(process.env.LOGBOOKS_LIST_LIMIT, 10) 
         : undefined
     };
     

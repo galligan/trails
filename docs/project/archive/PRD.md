@@ -1,4 +1,4 @@
-# Trails MVP – Product Requirements & Technical Spec
+# Logbooks MVP – Product Requirements & Technical Spec
 
 ## Purpose
 
@@ -13,9 +13,9 @@ Everything else (projects, tasks, teams, sub-teams, labels) is either implicit (
 ## Scope (MVP)
 
 - Included
-  - trails-lib (Drizzle ORM models & helpers)	
-  - trails-server (TypeScript MCP server, stdio only)
-  - trails-cli (global CLI via pnpm exec)
+  - logbooks-lib (Drizzle ORM models & helpers)	
+  - logbooks-server (TypeScript MCP server, stdio only)
+  - logbooks-cli (global CLI via pnpm exec)
   - storage with SQLite (file next to repo)
   - REST API (CRUD)
   - Basic playground (Basecamp)
@@ -29,11 +29,11 @@ Everything else (projects, tasks, teams, sub-teams, labels) is either implicit (
 ## Project Workspace (pnpm mono-repo)
 
 ```txt
-trails/
+logbooks/
 ├── packages/
-│   ├── trails-lib/          # DB + domain
-│   ├── trails-server/       # MCP wrapper
-│   └── trails-cli/          # bin/trails
+│   ├── logbooks-lib/          # DB + domain
+│   ├── logbooks-server/       # MCP wrapper
+│   └── logbooks-cli/          # bin/logbooks
 ├── basecamp/                # example repo & scripts
 └── pnpm-workspace.yaml
 
@@ -47,7 +47,7 @@ dirs:
 ## Data Model (Drizzle, SQLite)
 
 ```typescript
-// packages/trails-lib/src/schema.ts
+// packages/logbooks-lib/src/schema.ts
 import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
@@ -75,9 +75,9 @@ Why Users & Agents up-front?
 
 - future-proof for team ACLs; minimal perf cost (<3 joins)
 
-Migration helper lives in trails-lib/src/migrate.ts and is reused by server & CLI.
+Migration helper lives in logbooks-lib/src/migrate.ts and is reused by server & CLI.
 
-## Library API (trails-lib)
+## Library API (logbooks-lib)
 
 ```typescript
 export interface NoteInput { agentId: string; md: string; ts?: number }
@@ -85,33 +85,33 @@ export async function addNote(db, input: NoteInput): Promise<string>
 export async function listNotes(db, { after, limit }): Promise<Note[]>
 ```
 
-Both trails-cli and trails-server import these.
+Both logbooks-cli and logbooks-server import these.
 
-## CLI (trails) – UX Sketch
+## CLI (logbooks) – UX Sketch
 
 Command	Example	Effect
 
 ```typescript
-trails add "Finished parser refactor"	uses $TRAILS_AGENT_ID env	Inserts row
-trails tail -n 5	reads last 5 notes	Prints Markdown, newest→oldest
+logbooks add "Finished parser refactor"	uses $LOGBOOKS_AGENT_ID env	Inserts row
+logbooks tail -n 5	reads last 5 notes	Prints Markdown, newest→oldest
 ```
 
-Global install: pnpm dlx trails add ...
+Global install: pnpm dlx logbooks add ...
 
-## MCP Server (mcp-trails)
+## MCP Server (mcp-logbooks)
 
 ```typescript
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { addNoteTool, listNotesResource } from './tools/index.js';
 
-const server = new McpServer({ name: 'trails', version: '0.1.0' });
+const server = new McpServer({ name: 'logbooks', version: '0.1.0' });
 server.tool(addNoteTool);
 server.resource(listNotesResource);
 await server.connect(new StdioServerTransport());
 ```
 
-Both tools wrap calls to trails-lib.
+Both tools wrap calls to logbooks-lib.
 
 MCP Tool definitions (concise)
 - `addNote – params { md: string, agentId?: string, ts?: number }`
@@ -126,13 +126,13 @@ No auth beyond environment isolation in MVP (future: token header).
 pnpm install
 
 # create Basecamp demo DB & run tests
-pnpm --filter trails-lib test
+pnpm --filter logbooks-lib test
 
 # start MCP server (stdio)
-pnpm --filter trails-server start
+pnpm --filter logbooks-server start
 
 # example: agent writes a note
-echo '{"tool":"addNote","parameters":{"md":"Initial check-in"}}' | mcp-trails
+echo '{"tool":"addNote","parameters":{"md":"Initial check-in"}}' | mcp-logbooks
 ```
 
 ## Next-Step TODOs (post-MVP)

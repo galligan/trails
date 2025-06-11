@@ -115,7 +115,7 @@ export default [
       'import/parsers': {
         '@typescript-eslint/parser': ['.ts', '.tsx'],
       },
-      'import/internal-regex': '^(fieldbooks-lib|fieldbooks-cli|fieldbooks-mcp)/',
+      'import/internal-regex': '^(logbooks-lib|logbooks-cli|logbooks-mcp)/',
     },
     rules: {
       // TypeScript rules

@@ -1,0 +1,24 @@
+{
+  "name": "logbooks-mcp",
+  "version": "0.0.1",
+  "description": "MCP server for Logbooks field recording service",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "mcp-logbooks": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "drizzle-orm": "^0.44.2",
+    "logbooks-lib": "workspace:*"
+  }
+}

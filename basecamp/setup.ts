@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * @fileoverview Setup script for initializing the Fieldbooks demo environment
+ * @fileoverview Setup script for initializing the Logbooks demo environment
  * @module basecamp/setup
  */
 
-import { setupFieldbook, authors, addEntry, initFieldbookDir } from 'fieldbooks-lib';
-import type { FieldbooksDb } from 'fieldbooks-lib';
+import { setupLogbook, authors, addEntry, initLogbookDir } from 'logbooks-lib';
+import type { LogbooksDb } from 'logbooks-lib';
 
 /**
  * Demo data configuration
@@ -51,7 +51,7 @@ const DEMO_AUTHORS = [
  * @param {Database} db - The database instance
  * @returns {Promise<void>}
  */
-async function createDemoAuthors(db: FieldbooksDb): Promise<void> {
+async function createDemoAuthors(db: LogbooksDb): Promise<void> {
   for (const author of DEMO_AUTHORS) {
     try {
       await db.insert(authors).values({
@@ -70,7 +70,7 @@ async function createDemoAuthors(db: FieldbooksDb): Promise<void> {
  * @param {Database} db - The database instance
  * @returns {Promise<void>}
  */
-async function createDemoEntries(db: FieldbooksDb): Promise<void> {
+async function createDemoEntries(db: LogbooksDb): Promise<void> {
   const demoEntries = [
     {
       authorId: 'claude-engineer',
@@ -169,25 +169,25 @@ Ready for initial deployment.`,
  * @returns {Promise<void>}
  */
 async function setup(): Promise<void> {
-  console.log('🚀 Setting up Fieldbooks demo environment...\n');
+  console.log('🚀 Setting up Logbooks demo environment...\n');
 
   try {
-    // Initialize the fieldbook directory structure
-    const dir = await initFieldbookDir();
-    console.log(`✓ Initialized fieldbook directory at: ${dir}\n`);
+    // Initialize the logbook directory structure
+    const dir = await initLogbookDir();
+    console.log(`✓ Initialized logbook directory at: ${dir}\n`);
 
-    const db = await setupFieldbook();
+    const db = await setupLogbook();
 
     await createDemoAuthors(db);
     await createDemoEntries(db);
 
     console.log('\n✅ Demo setup complete!');
     console.log(`\nYou can now run demos with:`);
-    console.log(`  FIELDBOOKS_AUTHOR_ID=claude-engineer node demo.js`);
-    console.log(`  FIELDBOOKS_AUTHOR_ID=github-copilot node demo.js`);
-    console.log(`  FIELDBOOKS_AUTHOR_ID=codewhisperer node demo.js`);
-    console.log(`  FIELDBOOKS_AUTHOR_ID=demo-user node demo.js`);
-    console.log(`  FIELDBOOKS_AUTHOR_ID=ci-system node demo.js`);
+    console.log(`  LOGBOOKS_AUTHOR_ID=claude-engineer node demo.js`);
+    console.log(`  LOGBOOKS_AUTHOR_ID=github-copilot node demo.js`);
+    console.log(`  LOGBOOKS_AUTHOR_ID=codewhisperer node demo.js`);
+    console.log(`  LOGBOOKS_AUTHOR_ID=demo-user node demo.js`);
+    console.log(`  LOGBOOKS_AUTHOR_ID=ci-system node demo.js`);
   } catch (error) {
     console.error('❌ Setup failed:', error);
     process.exit(1);

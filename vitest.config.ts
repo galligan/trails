@@ -22,7 +22,7 @@ export default defineConfig({
         '**/examples/**',
         '**/scripts/**',
       ],
-      include: ['packages/*/src/**/*.{js,ts}'],
+      include: ['packages/*/src/**/*.{js,ts,tsx}'],
       thresholds: {
         lines: 80,
         functions: 80,

@@ -8,7 +8,7 @@ About You: @.ai/prompts/MAX.md
 
 ## Overview
 
-Fieldbooks is a field recording service for AI agents and users to append or fetch entries for updates, recaps, and hand-offs. It's built as a monorepo using pnpm workspaces with three main packages: fieldbooks-lib (core library), fieldbooks-cli (command-line interface), and fieldbooks-mcp (MCP server).
+Logbooks is a field recording service for AI agents and users to append or fetch entries for updates, recaps, and hand-offs. It's built as a monorepo using pnpm workspaces with three main packages: logbooks-lib (core library), logbooks-cli (command-line interface), and logbooks-mcp (MCP server).
 
 ## Commands
 
@@ -24,8 +24,8 @@ pnpm build
 pnpm dev
 
 # Run specific package commands
-pnpm --filter fieldbooks-lib build
-pnpm --filter fieldbooks-cli test
+pnpm --filter logbooks-lib build
+pnpm --filter logbooks-cli test
 ```
 
 ### Testing
@@ -40,7 +40,7 @@ pnpm test:coverage
 pnpm test:watch
 
 # Run tests for specific package
-pnpm --filter fieldbooks-lib test
+pnpm --filter logbooks-lib test
 ```
 
 ### Code Quality
@@ -60,24 +60,24 @@ pnpm typecheck
 
 ### Database
 ```bash
-# Run migrations (from fieldbooks-lib)
-pnpm --filter fieldbooks-lib db:migrate
+# Run migrations (from logbooks-lib)
+pnpm --filter logbooks-lib db:migrate
 
 # Generate migration files
-pnpm --filter fieldbooks-lib db:generate
+pnpm --filter logbooks-lib db:generate
 ```
 
 ## Architecture
 
 The project uses a clean monorepo structure with:
 
-- **fieldbooks-lib**: Core domain logic, database models (Drizzle ORM + SQLite), and validation (Zod)
-- **fieldbooks-cli**: Command-line interface with commands `add` and `list`
-- **fieldbooks-mcp**: MCP server exposing `addEntry` and `listEntries` tools via stdio transport
+- **logbooks-lib**: Core domain logic, database models (Drizzle ORM + SQLite), and validation (Zod)
+- **logbooks-cli**: Command-line interface with commands `add` and `list`
+- **logbooks-mcp**: MCP server exposing `addEntry` and `listEntries` tools via stdio transport
 
 Key architectural patterns:
 - All inputs validated with Zod schemas before processing
-- Custom error hierarchy (FieldbooksError) with retry logic for database operations
+- Custom error hierarchy (LogbooksError) with retry logic for database operations
 - SQLite database with migrations support
 - Strict TypeScript with no `any` types
 - Async/await throughout with proper error handling
@@ -92,7 +92,7 @@ Tests use Vitest with separate test databases. Integration tests cover the full 
 
 ## MCP Server Development
 
-The fieldbooks-mcp package implements the Model Context Protocol. When modifying:
+The logbooks-mcp package implements the Model Context Protocol. When modifying:
 - Update the tool schemas in `index.ts`
 - Ensure stdio transport compatibility
 - Test with the MCP inspector or basecamp demo scripts

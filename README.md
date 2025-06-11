@@ -1,16 +1,16 @@
-# Fieldbooks v0.0.1
+# Logbooks v0.0.1
 
 A tiny, opinionated field recording service that authors (users, agents, or services) can call to append or fetch entries for updates, recaps, hand-offs, etc.
 
 ## Project Structure
 
 ```
-fieldbooks/
+logbooks/
 ├── packages/
-│   ├── fieldbooks-lib/      # Core library with DB + domain logic
-│   ├── fieldbooks-mcp/      # MCP server wrapper
-│   └── fieldbooks-cli/      # Command line interface
-├── basecamp/                # Example repo & demo scripts
+│   ├── logbooks-lib/       # Core library with DB + domain logic
+│   ├── logbooks-mcp/       # MCP server wrapper
+│   └── logbooks-cli/       # Command line interface
+├── basecamp/               # Example repo & demo scripts
 └── pnpm-workspace.yaml
 ```
 
@@ -30,16 +30,16 @@ pnpm test
 cd basecamp && node setup.js && node demo.js
 
 # Test CLI
-FIELDBOOKS_AUTHOR_ID=my-author node packages/fieldbooks-cli/dist/index.js add "Hello Fieldbooks!"
-node packages/fieldbooks-cli/dist/index.js list -n 5
+LOGBOOKS_AUTHOR_ID=my-author node packages/logbooks-cli/dist/index.js add "Hello Logbooks!"
+node packages/logbooks-cli/dist/index.js list -n 5
 
 # Test MCP server
-node packages/fieldbooks-mcp/dist/index.js
+node packages/logbooks-mcp/dist/index.js
 ```
 
 ## Core API
 
-### fieldbooks-lib
+### logbooks-lib
 
 ```typescript
 export interface EntryInput { 
@@ -57,12 +57,12 @@ export async function listEntries(db, options: ListOptions): Promise<Entry[]>
 
 ```bash
 # Add an entry
-fieldbooks add "Completed feature X" --author-id my-author --type update
+logbook add "Completed feature X" --author-id my-author --type update
 
 # List recent entries
-fieldbooks list -n 10
-fieldbooks list --author-id my-author --type decision
-fieldbooks list --sort timestamp --order asc
+logbook list -n 10
+logbook list --author-id my-author --type decision
+logbook list --sort timestamp --order asc
 ```
 
 ### MCP Server
@@ -91,8 +91,8 @@ The MCP server provides two tools:
 
 ## Environment Variables
 
-- `FIELDBOOKS_AUTHOR_ID` - Default author ID for CLI operations
-- `FIELDBOOKS_DB` - Path to SQLite database file
+- `LOGBOOKS_AUTHOR_ID` - Default author ID for CLI operations
+- `LOGBOOKS_DB` - Path to SQLite database file
 
 ## Development
 
@@ -104,5 +104,5 @@ pnpm dev
 pnpm clean
 
 # Run specific package tests
-pnpm --filter fieldbooks-lib test
+pnpm --filter logbooks-lib test
 ```
