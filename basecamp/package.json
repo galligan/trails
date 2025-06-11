@@ -1,7 +1,7 @@
 {
   "name": "basecamp",
   "version": "0.0.1",
-  "description": "Fieldbooks playground and examples",
+  "description": "Logbooks playground and examples",
   "type": "module",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
     "setup": "tsx setup.ts"
   },
   "dependencies": {
-    "fieldbooks-lib": "workspace:*",
+    "logbooks-lib": "workspace:*",
     "drizzle-orm": "^0.44.2"
   },
   "devDependencies": {

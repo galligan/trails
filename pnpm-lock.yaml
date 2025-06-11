@@ -71,9 +71,9 @@ importers:
       drizzle-orm:
         specifier: ^0.44.2
         version: 0.44.2(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)
-      fieldbooks-lib:
+      logbooks-lib:
         specifier: workspace:*
-        version: link:../packages/fieldbooks-lib
+        version: link:../packages/logbooks-lib
     devDependencies:
       '@types/node':
         specifier: ^22.15.30
@@ -85,7 +85,7 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
-  packages/fieldbooks-cli:
+  packages/logbooks-cli:
     dependencies:
       commander:
         specifier: ^14.0.0
@@ -93,9 +93,6 @@ importers:
       drizzle-orm:
         specifier: ^0.44.2
         version: 0.44.2(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)
-      fieldbooks-lib:
-        specifier: workspace:*
-        version: link:../fieldbooks-lib
       ink:
         specifier: ^6.0.0
         version: 6.0.0(@types/react@19.1.6)(react@19.1.0)
@@ -111,6 +108,9 @@ importers:
       ink-text-input:
         specifier: ^6.0.0
         version: 6.0.0(ink@6.0.0(@types/react@19.1.6)(react@19.1.0))(react@19.1.0)
+      logbooks-lib:
+        specifier: workspace:*
+        version: link:../logbooks-lib
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -119,7 +119,7 @@ importers:
         specifier: ^19.1.6
         version: 19.1.6
 
-  packages/fieldbooks-lib:
+  packages/logbooks-lib:
     dependencies:
       '@types/fs-extra':
         specifier: ^11.0.4
@@ -159,7 +159,7 @@ importers:
         specifier: ^0.31.1
         version: 0.31.1
 
-  packages/fieldbooks-mcp:
+  packages/logbooks-mcp:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.12.1
@@ -167,9 +167,9 @@ importers:
       drizzle-orm:
         specifier: ^0.44.2
         version: 0.44.2(@types/better-sqlite3@7.6.13)(better-sqlite3@11.10.0)
-      fieldbooks-lib:
+      logbooks-lib:
         specifier: workspace:*
-        version: link:../fieldbooks-lib
+        version: link:../logbooks-lib
 
 packages:
 

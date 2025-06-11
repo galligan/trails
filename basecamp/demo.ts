@@ -6,8 +6,8 @@
  */
 
 import { eq } from 'drizzle-orm';
-import { setupFieldbook, entries } from 'fieldbooks-lib';
-import type { FieldbooksDb } from 'fieldbooks-lib';
+import { setupFieldbook, entries } from 'logbooks-lib';
+import type { FieldbooksDb } from 'logbooks-lib';
 
 /**
  * Demonstrates basic Fieldbooks functionality by listing entries for a specific author

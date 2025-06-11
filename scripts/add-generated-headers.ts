@@ -105,7 +105,7 @@ async function addHeadersToPackage(packagePath: string): Promise<void> {
  */
 async function main(): Promise<void> {
   const packagesDir = join(__dirname, '..', 'packages');
-  const packages = ['fieldbooks-lib', 'fieldbooks-cli', 'fieldbooks-mcp'];
+  const packages = ['logbooks-lib', 'logbooks-cli', 'logbooks-mcp'];
 
   console.log('Adding generated file headers...\n');
 

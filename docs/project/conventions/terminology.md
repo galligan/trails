@@ -1,8 +1,8 @@
-# Fieldbooks Terminology Guide
+# Logbooks Terminology Guide
 
 ## Core Metaphor: Field Research meets Outdoor Exploration
 
-Drawing from both scientific field research and outdoor exploration traditions, Fieldbooks uses terminology that feels natural to both contexts.
+Drawing from both scientific field research and outdoor exploration traditions, Logbooks uses terminology that feels natural to both contexts.
 
 ## Primary Terms
 
@@ -23,9 +23,9 @@ Current types: `update`, `decision`, `error`, `handoff`, `observation`, `task`, 
    - Replaces or complements: `error`
    - Usage: "Hazard: memory leak detected in worker process"
 
-4. **`trail-note`** - Quick observation while in motion
+4. **`field-note`** - Quick observation while in motion
    - Complements: `update`
-   - Usage: "Trail note: users requesting dark mode"
+   - Usage: "Field note: users requesting dark mode"
 
 5. **`summit`** - Major achievement or goal reached
    - New type
@@ -48,14 +48,14 @@ Current types: `update`, `decision`, `error`, `handoff`, `observation`, `task`, 
 
 ## Conceptual Language
 
-### The Fieldbook as Equipment
-- "Your fieldbook is essential gear for the journey"
-- "Pack light, but never forget your fieldbook"
-- "A reliable fieldbook for every expedition"
+### The Logbook as Equipment
+- "Your logbook is essential gear for the journey"
+- "Pack light, but never forget your logbook"
+- "A reliable logbook for every expedition"
 
 ### Recording Metaphors
 - **"Field notes"** instead of "entries" (where appropriate)
-- **"Trail log"** for chronological views
+- **"Journey log"** for chronological views
 - **"Base camp"** for the main/home view
 - **"Expedition log"** for a complete record
 
@@ -69,25 +69,25 @@ Current types: `update`, `decision`, `error`, `handoff`, `observation`, `task`, 
 ### CLI Examples
 ```bash
 # Recording a waypoint
-fieldbooks add "Reached data migration waypoint" --type waypoint
+logbook add "Reached data migration waypoint" --type waypoint
 
 # Logging a hazard
-fieldbooks add "Hazard: API rate limit approaching" --type hazard
+logbook add "Hazard: API rate limit approaching" --type hazard
 
 # Recording weather conditions
-fieldbooks add "Weather: System load normal, all services green" --type weather
+logbook add "Weather: System load normal, all services green" --type weather
 
 # Summit celebration
-fieldbooks add "Summit! Released v2.0 after 6-month climb" --type summit
+logbook add "Summit! Released v2.0 after 6-month climb" --type summit
 ```
 
 ### In Documentation
-"Every explorer needs a reliable fieldbook. Whether you're charting new territory in your codebase or documenting the hazards you've encountered, Fieldbooks keeps your expedition notes organized and accessible."
+"Every explorer needs a reliable logbook. Whether you're charting new territory in your codebase or documenting the hazards you've encountered, Logbooks keeps your expedition notes organized and accessible."
 
 ### Error Messages with Personality
-- "Can't find the fieldbook! Check your path and try again."
-- "Fieldbook locked by another explorer. Wait and retry."
-- "Entry too long for fieldbook page. Consider splitting into multiple entries."
+- "Can't find the logbook! Check your path and try again."
+- "Logbook locked by another explorer. Wait and retry."
+- "Entry too long for logbook page. Consider splitting into multiple entries."
 
 ## Extended Vocabulary
 
@@ -97,7 +97,7 @@ fieldbooks add "Summit! Released v2.0 after 6-month climb" --type summit
 - `guide` - User authors leading the way
 
 ### Status/State Terms
-- **"On trail"** - Active/in progress
+- **"On journey"** - Active/in progress
 - **"At camp"** - Paused/waiting
 - **"Summited"** - Completed successfully
 - **"Turned back"** - Cancelled/aborted
@@ -110,24 +110,24 @@ fieldbooks add "Summit! Released v2.0 after 6-month climb" --type summit
 ## Implementation Ideas
 
 ### Future Features with Field Flavor
-1. **Trail Maps** - Visualizations of entry patterns
+1. **Journey Maps** - Visualizations of entry patterns
 2. **Weather Reports** - System status summaries
 3. **Gear Check** - Validation/health checks
-4. **Trail Markers** - Important entries that others should see
-5. **Shelter Logs** - Shared team fieldbooks
+4. **Waypoint Markers** - Important entries that others should see
+5. **Shelter Logs** - Shared team logbooks
 
 ### CLI Personality
 ```bash
-$ fieldbooks add "Starting new feature"
-📝 Recorded in fieldbook at 14:23:07
+$ logbook add "Starting new feature"
+📝 Recorded in logbook at 14:23:07
 
-$ fieldbooks list --type hazard
-⚠️  Recent hazards on the trail:
+$ logbook list --type hazard
+⚠️  Recent hazards on the journey:
 - [14:00] Memory leak in worker process
 - [13:45] Database connection timeout
 
-$ fieldbooks summit "Deployed to production!"
-🏔️ Summit reached! Entry recorded in fieldbook.
+$ logbook summit "Deployed to production!"
+🏔️ Summit reached! Entry recorded in logbook.
 ```
 
 ## Brand Voice Guidelines
@@ -139,7 +139,7 @@ $ fieldbooks summit "Deployed to production!"
 
 ### Language Principles
 1. **Active voice**: "Record your observation" not "Observations should be recorded"
-2. **Present tense**: "The fieldbook tracks..." not "The fieldbook will track..."
+2. **Present tense**: "The logbook tracks..." not "The logbook will track..."
 3. **Concrete imagery**: "Mark this waypoint" not "Create a checkpoint entry"
 
 ### Avoiding Overuse
@@ -149,7 +149,7 @@ $ fieldbooks summit "Deployed to production!"
 
 ## Summary
 
-The Fieldbooks terminology draws from both scientific field research and outdoor exploration, creating a unique voice that:
+The Logbooks terminology draws from both scientific field research and outdoor exploration, creating a unique voice that:
 - Feels professional yet approachable
 - Supports the "outfitter" brand theme
 - Makes routine logging feel like part of an adventure

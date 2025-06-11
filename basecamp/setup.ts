@@ -5,8 +5,8 @@
  * @module basecamp/setup
  */
 
-import { setupFieldbook, authors, addEntry, initFieldbookDir } from 'fieldbooks-lib';
-import type { FieldbooksDb } from 'fieldbooks-lib';
+import { setupFieldbook, authors, addEntry, initFieldbookDir } from 'logbooks-lib';
+import type { FieldbooksDb } from 'logbooks-lib';
 
 /**
  * Demo data configuration

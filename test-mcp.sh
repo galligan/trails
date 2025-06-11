@@ -3,8 +3,8 @@
 echo "Testing MCP server..."
 
 # Start the MCP server in the background
-cd /home/runner/work/fieldbooks/fieldbooks
-timeout 5s node packages/fieldbooks-mcp/dist/index.js 2>/dev/null &
+cd /home/runner/work/logbooks/logbooks
+timeout 5s node packages/logbooks-mcp/dist/index.js 2>/dev/null &
 SERVER_PID=$!
 
 # Give it a moment to start

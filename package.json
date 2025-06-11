@@ -1,8 +1,8 @@
 {
-  "name": "@galligan/fieldbooks-workspace",
+  "name": "@galligan/logbooks-workspace",
   "version": "0.0.1",
   "private": true,
-  "description": "Fieldbooks field recording service workspace",
+  "description": "Logbooks field recording service workspace",
   "type": "module",
   "scripts": {
     "build": "pnpm -r build && tsx scripts/add-generated-headers.ts",

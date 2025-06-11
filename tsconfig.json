@@ -25,12 +25,12 @@
     "useUnknownInCatchVariables": true,
     "baseUrl": ".",
     "paths": {
-      "fieldbooks-lib": ["./packages/fieldbooks-lib/src/index.ts"],
-      "fieldbooks-lib/*": ["./packages/fieldbooks-lib/src/*"],
-      "fieldbooks-cli": ["./packages/fieldbooks-cli/src/index.ts"],
-      "fieldbooks-cli/*": ["./packages/fieldbooks-cli/src/*"],
-      "fieldbooks-mcp": ["./packages/fieldbooks-mcp/src/index.ts"],
-      "fieldbooks-mcp/*": ["./packages/fieldbooks-mcp/src/*"]
+      "logbooks-lib": ["./packages/logbooks-lib/src/index.ts"],
+      "logbooks-lib/*": ["./packages/logbooks-lib/src/*"],
+      "logbooks-cli": ["./packages/logbooks-cli/src/index.ts"],
+      "logbooks-cli/*": ["./packages/logbooks-cli/src/*"],
+      "logbooks-mcp": ["./packages/logbooks-mcp/src/index.ts"],
+      "logbooks-mcp/*": ["./packages/logbooks-mcp/src/*"]
     }
   },
   "exclude": [
@@ -45,8 +45,8 @@
   "include": ["packages/*/src/**/*", "vitest.setup.ts", "vitest.config.ts", "basecamp/*.ts", "scripts/*.ts", "setup-cli.ts"],
   "references": [
     { "path": "./basecamp" },
-    { "path": "./packages/fieldbooks-lib" },
-    { "path": "./packages/fieldbooks-cli" },
-    { "path": "./packages/fieldbooks-mcp" }
+    { "path": "./packages/logbooks-lib" },
+    { "path": "./packages/logbooks-cli" },
+    { "path": "./packages/logbooks-mcp" }
   ]
 }

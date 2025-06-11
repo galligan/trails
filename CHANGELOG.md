@@ -8,10 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.1] - 2025-06-08
 
 ### Added
-- Initial release of Fieldbooks field recording service
-- Core library (`fieldbooks-lib`) with SQLite storage and Drizzle ORM
-- CLI tool (`fieldbooks-cli`) with `add` and `list` commands
-- MCP server (`fieldbooks-mcp`) for AI agent integration
+- Initial release of Logbooks field recording service
+- Core library (`logbooks-lib`) with SQLite storage and Drizzle ORM
+- CLI tool (`logbooks-cli`) with `add` and `list` commands
+- MCP server (`logbooks-mcp`) for AI agent integration
 - React Ink UI for enhanced CLI experience
 - Support for entry types (update, decision, error, handoff, observation, task, checkpoint)
 - Unified authors system supporting users, agents, and services
