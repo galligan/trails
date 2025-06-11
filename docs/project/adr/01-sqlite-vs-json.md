@@ -1,8 +1,8 @@
-# SQLite vs JSON for Fieldbooks
+# SQLite vs JSON for Logbooks
 
 ## Current Choice: SQLite
 
-Fieldbooks currently uses SQLite for storage. Here's why this makes sense and when JSON might be better.
+Logbooks currently uses SQLite for storage. Here's why this makes sense and when JSON might be better.
 
 ## Benefits of SQLite
 
@@ -96,9 +96,9 @@ HAVING count > 5;
 ### 3. **Simplicity**
 ```typescript
 // Simple to implement
-const data = JSON.parse(fs.readFileSync('fieldbook.json'));
+const data = JSON.parse(fs.readFileSync('logbook.json'));
 data.entries.push(newEntry);
-fs.writeFileSync('fieldbook.json', JSON.stringify(data, null, 2));
+fs.writeFileSync('logbook.json', JSON.stringify(data, null, 2));
 ```
 
 ### 4. **Git-Friendly**
@@ -144,7 +144,7 @@ fs.writeFileSync('fieldbook.json', JSON.stringify(data, null, 2));
 - **Multiple concurrent users**
 - **Performance matters**
 
-### Example: Fieldbook entries
+### Example: Logbook entries
 - Constantly appending new entries
 - Need to query by date, author, type
 - Want fast "last 10 entries"
@@ -155,15 +155,15 @@ fs.writeFileSync('fieldbook.json', JSON.stringify(data, null, 2));
 The best of both worlds:
 
 ### SQLite for:
-- **Fieldbook entries** (`.fieldbook/fieldbook.sqlite`)
+- **Logbook entries** (`.logbook/logbook.sqlite`)
 - **High-performance queries**
 - **Data integrity**
 
 ### JSON for:
-- **Configuration** (`.fieldbook/config.json`)
-- **Exports** (`fieldbooks export --format=json`)
+- **Configuration** (`.logbook/config.json`)
+- **Exports** (`logbooks export --format=json`)
 - **Backups** (human-readable snapshots)
-- **Templates** (shareable fieldbook templates)
+- **Templates** (shareable logbook templates)
 
 ## Performance Comparison
 
@@ -192,7 +192,7 @@ async function listEntries(page: number = 1, limit: number = 10) {
 
 // JSON: Must load everything
 function listEntriesJSON(page: number = 1, limit: number = 10) {
-  const data = JSON.parse(fs.readFileSync('fieldbook.json'));
+  const data = JSON.parse(fs.readFileSync('logbook.json'));
   const sorted = data.entries.sort((a, b) => b.timestamp - a.timestamp);
   return sorted.slice((page - 1) * limit, page * limit);
 }
@@ -200,7 +200,7 @@ function listEntriesJSON(page: number = 1, limit: number = 10) {
 
 ## Summary
 
-**SQLite is the right choice for Fieldbooks because:**
+**SQLite is the right choice for Logbooks because:**
 1. It's an append-heavy log system
 2. Users will accumulate thousands of entries
 3. We need efficient querying (by date, author, type)
@@ -210,7 +210,7 @@ function listEntriesJSON(page: number = 1, limit: number = 10) {
 **JSON is perfect for:**
 1. Configuration files (as planned)
 2. Export/import functionality
-3. Sharing fieldbook snapshots
+3. Sharing logbook snapshots
 4. Templates and examples
 
 The hybrid approach gives us the best of both worlds: SQLite's performance and reliability for data, JSON's readability and simplicity for configuration.

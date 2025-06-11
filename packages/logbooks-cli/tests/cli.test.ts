@@ -4,7 +4,7 @@ import { existsSync, unlinkSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { setupDatabase, setupFieldbook, addEntry, listEntries } from 'logbooks-lib';
+import { setupDatabase, setupLogbook, addEntry, listEntries } from 'logbooks-lib';
 import { mockExit, mockConsole } from './setup';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -151,7 +151,7 @@ describe('Logbooks CLI', () => {
     });
 
     it('should fail when no author ID is provided', () => {
-      // Explicitly clear FIELDBOOKS_AUTHOR_ID to ensure no environment leak
+      // Explicitly clear LOGBOOKS_AUTHOR_ID to ensure no environment leak
       const result = runCLI(['add', 'Test entry'], { LOGBOOKS_AUTHOR_ID: '' });
       expect(result.code).toBe(1);
       expect(result.stderr).toContain('Author ID is required');

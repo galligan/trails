@@ -13,9 +13,9 @@ The ESLint setup for this monorepo is exhibiting critical and persistent module 
 The primary symptom is the ESLint process (likely via the editor's extension) reporting `no-unresolved` import errors for valid modules.
 
 - **External Dependencies**: Falsely reports that packages like `drizzle-orm`, `fs-extra`, and `better-sqlite3` cannot be found.
-  - *Example File*: `packages/fieldbooks-lib/src/db.ts`
+  - *Example File*: `packages/logbooks-lib/src/db.ts`
 - **Local Modules**: Falsely reports that local project files cannot be found.
-  - *Example File*: `packages/fieldbooks-cli/src/index.ts` incorrectly flags the import of `./commands/init.js` even after the file has been created.
+  - *Example File*: `packages/logbooks-cli/src/index.ts` incorrectly flags the import of `./commands/init.js` even after the file has been created.
 
 These errors persist even after cleaning the workspace and performing fresh dependency installations.
 
@@ -50,7 +50,7 @@ I recommend the following actions to isolate and resolve the issue:
 
 1.  **Isolate the Linter**: Run ESLint directly from the command line on a specific file:
     ```bash
-    pnpm -F fieldbooks-lib eslint src/db.ts
+    pnpm -F logbooks-lib eslint src/db.ts
     ```
     - If this passes without error, the problem is almost certainly with the editor's ESLint extension and its configuration.
     - If this fails with the same errors, the problem is in the core ESLint configuration (`eslint.config.mjs`).
@@ -66,6 +66,6 @@ I recommend the following actions to isolate and resolve the issue:
     },
     ```
 
-3.  **Check `tsconfig.json`**: Verify that `baseUrl` and `paths` are correctly defined in the root `tsconfig.json` to create aliases for each package in the workspace (e.g., `"fieldbooks-lib/*": ["packages/fieldbooks-lib/src/*"]`).
+3.  **Check `tsconfig.json`**: Verify that `baseUrl` and `paths` are correctly defined in the root `tsconfig.json` to create aliases for each package in the workspace (e.g., `"logbooks-lib/*": ["packages/logbooks-lib/src/*"]`).
 
 This systematic approach should quickly determine whether the fault lies with the core configuration or the editor integration, leading to a much faster resolution. 
